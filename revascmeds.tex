@@ -1,0 +1,477 @@
+\documentclass[11pt]{article}
+\usepackage{fullpage}
+\usepackage{siunitx}
+\usepackage{hyperref,graphicx,booktabs,dcolumn}
+\usepackage{stata}
+\usepackage[x11names]{xcolor}
+\usepackage{natbib}
+\usepackage{chngcntr}
+\usepackage{pgfplotstable}
+\usepackage{pdflscape}
+\usepackage{multirow}
+\usepackage{booktabs}
+
+  
+\newcommand{\thedate}{\today}
+\counterwithin{figure}{section}
+\bibliographystyle{unsrt}
+\hypersetup{%
+    pdfborder = {0 0 0}
+}
+
+\begin{document}
+
+\begin{titlepage}
+  \begin{flushright}
+        \Huge
+		\textbf{Revascularization strategy following NSTEMI and predicting secondary prevention medication use: a linked data study.}
+\color{violet}
+\rule{16cm}{2mm} \\
+\Large
+\color{black}
+Protocol \\
+\thedate \\
+\color{blue}
+\url{https://github.com/cardiopharmnerd/revascmeds} \\
+\color{black}
+		\vfill
+	\end{flushright}
+		\Large
+\noindent
+Adam Livori \\
+PhD Candidate \\
+\color{blue}
+\href{mailto:adam.livori1@monash.edu}{adam.livori1@monash.edu} \\
+\color{black}
+\\
+Center for Medication Use and Safety, Faculty of Pharmacy and Pharmaceutical Sciences, Monash Unviersity, Melbourne, Australia \\
+\\
+\end{titlepage}
+
+\pagebreak
+\tableofcontents
+\pagebreak
+\listoffigures
+\pagebreak
+
+\pagebreak
+\section{Preface}
+
+The is the protocol for the paper Revascularization strategy following NSTEMI and predicting secondary prevention medication use: a linked data study. \\
+This protocol details the data preparation (cleaning that was undertaken from a linked dataset provided by the Victorian Department of Health as the source of Victorian Admitted Episodes Dataset (VAED), and the Centre for Vicotiran Data Linkage for provision of data linkage). This study was approved by the Human Research and Ethics Committees from the Australian Institute for Health and Welfare (AIHW) (EO2018/4/468) and Monash University (14339). \\
+The initial cohort, with removal of nested admissions, transfers and same-day admissions was previously cleaned and presented in a previous \color{blue} \href{https://github.com/cardiopharmnerd/medsremote}{protocol}.\\
+\color{black} To generate this document, the Stata package texdoc was used, which is avaiable from \color{blue} \href{http://repec.sowi.unibe.ch/stata/texdoc/}{here}. \color{black} The do file was orignially coded and then exported from the Secure Unified Research Environment (SURE), and so the histograms geenreated were exported separately and then imported via LaTex coding due to constraints on exporting raw data from SURE. Therefore, when reproducing the code, use the do file rather than copying from the LaTex document. 
+
+\section{Abbreviations}
+
+\begin{itemize}
+\item ABS: Australian Bureau of Statistics
+\item ACEi: Angiotensin converting enzyme inhibitor
+\item AF: Atrial fibrillation
+\item AFL: Atrial flutter
+\item AIHW: Australian Institute of Health and Welfare
+\item ARB: Angiotensin II receptor blocker
+\item ARIAl Accessibility/remonteness index of Australia
+\item ATC: Anatomical therapeutic chemical
+\item CABG: Coronary artery bypass graft
+\item CBD: Cerebrovascular disease 
+\item CCU: Coronary care unit
+\item CHF: Heart failure
+\item CPD: Chronic pulmonary disease
+\item NOAC: Non-vitaminm K oral anticoagulant
+\item DEM: Dementia
+\item DM: Diabetis mellitus
+\item DMNC: DM without chronic complications
+\item DMWC: Diabets with chronic complications
+\item HIV: Human immunodeficiency virus or acquired immunodeficiency disease
+\item HOP: Hemiplegia or paraplegia
+\item HT: Hypertension
+\item ICD: International classification fo disease (ICD-10 Australian Modified codes were present in this dataset)
+\item IRSD: Index of relative socioeconomic disadvantage
+\item MAL : Malignancy
+\item MBS: Medicare benefit scheme
+\item MI: Myocardial infarction
+\item MIC: Previous MI
+\item MLD: Mild liver disease
+\item MST: Metastatic solid tumour
+\item NDI: National death index
+\item NOAC: Non-vitamin K oral anticoagulant
+\item NSTEMI: Non-ST elevation myocardial infarction
+\item P2Y12i: Adenosine diphosphate receptor (P2Y12) inhibitor
+\item PBS: Pharmacetical benefit scheme
+\item PCI: Percutaneous coronary intervention
+\item PDC: Proportion of days covered
+\item PUD: Peptic ulcer disease
+\item PVD: Peripheral vascular disease
+\item REND: Renal disease
+\item RHEUD: Rheumatic disease
+\item SLA: Statistical local area
+\item SLD: Severe liver disease
+\item STEMI: ST elevation myocardial infarction
+\item VAED: Victorian admitted episode dataset
+\item WHO: World Health Organisation
+\end{itemize}
+
+\pagebreak
+
+\section{Introduction}
+
+The core management strategy for myocardial infarction is the use of revascularisation, either by percutaneous coronary intervention or coronary artery bypass grafts.\cite{accrevasc2022} The life-prolonging benefits of these revascularisation strategies have revolutionised cardiac care following myocardial infarction.1 Following myocardial infarction, regardless of revascularisation strategy, the use secondary prevention medications (dual antiplatelet therapy; angiotensin converting enzyme inhibitors/angiotensin receptor blockers (ACEi/ARB); HMG Co-A reductase inhibitors (statins); and beta blockers) are recommended. The rationale stands that revascularisation will correct current stenoses impacting cardiac output and potential symptoms, but not prevent plaque progression and possible ventricular remodelling.2 Both strategies have their respective advantages, with selection of revascularisation strategy individualised to characteristics such as coronary anatomy, single or multi-vessel disease, comorbidities and preference of the person receiving revascularisation.\cite{accrevasc2022} \\~\\
+The objective of this study was to determine how revascularisation strategy following NSTEMI was associated with secondary prevention medication use in the 12 months post discharge.  
+
+
+\pagebreak
+		
+\section{MI cohort dataset creation}
+\subsection{Previously cleaned cohort import}
+We have used a previously cleaned cohort of people admitted with a prmiary diagnosis of MI from Victoria Hospitals. We cleaned nested admissions and transfers, creating unique episodes of care for each MI. This dataset was then merged with a dataset from the NDI, allowing for confirmation of dates of death during the follow up period (until 30/6/2018). 
+
+\color{violet}
+\begin{stlog}\input{log/1.log.tex}\end{stlog}
+\color{black}
+\begin{figure} [h]
+	\centering
+	\includegraphics[width=0.5\textwidth]{hist_miadmissions.pdf}
+	\caption{Histogram of all MI admissions from VAED dataset}
+	\label{hist_miadmissions}
+\end{figure}
+
+\subsection{Removal of nested admissions}
+\color{violet}
+\color{black}
+The histogram details the total lookback avaiable for all MI admissions, however the PBS data avaiable for linkage is limited between 2012 and 2018, so our cohort was selected from these dates, with lookback to 2006 avaiable for previous MI events (which was done in previous coding \color{blue} \href{https://github.com/cardiopharmnerd/medsremote}{protocol}. \\~\\
+\color{black} We also have a dataset that contains the MI admissions, but contains all diagnosis and procedure codes (up to 40 within each admission) for each admission which will be used for assigning cormorbidities. 
+\color{violet}
+\begin{stlog}\input{log/2.log.tex}\end{stlog}
+\color{black}
+\begin{figure} [h]
+	\centering
+	\includegraphics[width=0.5\textwidth]{hist_cohortmiadmissions.pdf}
+	\caption{Histrogram of MI admissions for selected cohort}
+	\label{hist_cohortmiadmissions}
+\end{figure}
+
+\subsection{Removal of nested admissions}
+\color{violet}
+\begin{stlog}\input{log/3.log.tex}\end{stlog}
+\color{black}
+\section{Identification of revascularisation strategies used}
+\subsection{Revascularisation following MI}
+This step followed a similar process as the comorbidity assignment, however we used the procedure codes for CABG and PCI within 30 days of admission for MI. In addition to creating a variable listing date of procedure, binary tags for PCI and CABG were created. A combined tag for either procedure was also created, noting that 122 MI admissions had both procedures within 30 days of admission. 
+\color{violet}
+\begin{stlog}\input{log/4.log.tex}\end{stlog}
+\color{black}
+\begin{figure} [h]
+	\centering
+	\includegraphics[width=0.5\textwidth]{hist_miadmissionscabg.pdf}
+	\caption{Histrogram of MI admissions with CABG for cohort}
+	\label{hist_miadmissionscabg}
+\end{figure}
+
+\subsection{Removal of nested admissions}
+\color{violet}
+\begin{stlog}\input{log/5.log.tex}\end{stlog}
+\color{black}
+\begin{figure} [h]
+	\centering
+	\includegraphics[width=0.5\textwidth]{hist_miadmissionspci.pdf}
+	\caption{Histrogram of MI admissions with PCI for cohort}
+	\label{hist_miadmissionspci}
+\end{figure}
+
+\subsection{Removal of nested admissions}
+\color{violet}
+\begin{stlog}\input{log/6.log.tex}\end{stlog}
+\color{black}
+\begin{figure} [h]
+	\centering
+	\includegraphics[width=0.5\textwidth]{hist_timetocabg.pdf}
+	\caption{Histogram of time from admission to CABG for cohort}
+	\label{hist_timetocabg}
+\end{figure}
+
+\subsection{Removal of nested admissions}
+\color{violet}
+\begin{stlog}\input{log/7.log.tex}\end{stlog}
+\color{black}
+\begin{figure} [h]
+	\centering
+	\includegraphics[width=0.5\textwidth]{hist_timetopci.pdf}
+	\caption{Histogram of time from admission to PCI for cohort}
+	\label{hist_timetopci}
+\end{figure}
+
+\subsection{Removal of nested admissions}
+\color{violet}
+\begin{stlog}\input{log/8.log.tex}\end{stlog}
+\color{black}
+\subsection{Prior revascularisation}
+We also wanted to know whether a person had received CABG or PCI prior to their MI, we used the same procedure codes as above, but performed a lookback across all VAED data available (earliest admission data is from 2005). Once we created the tags for previous revascularisation, we merged them back into the procedure dataset. 
+\color{violet}
+\begin{stlog}\input{log/9.log.tex}\end{stlog}
+\color{black}
+\pagebreak
+\section{Medication use}
+\subsection{Identifying medications of interest from PBS data}
+This first step has been previously reported in another \color{blue} \href{https://github.com/cardiopharmnerd/medsremote}{protocol} \color{black}. This includes identifying medications from antiplatelet (P2Y12i), ACEi, ARB, beta blocker and statin (which includes combination statin with ezetimibe, but not ezetimibe monotherapy). For use in the secondary analysis, we also tagged statin therapy defined as high intenstiy, which includes atorvastatin 40mg and 80mg, and rosuvastatin 20mg and 40mg. \cite{collet2020}  \\
+We also tagged MI admissions with previous supply of secondary prevention medications in the 60 days prior to MI admission.
+
+\color{violet}
+\begin{stlog}\input{log/10.log.tex}\end{stlog}
+\color{black}
+\pagebreak
+\subsection{Prior dispesning of medications}
+We collapsed dispensings tagged per medication class and occurring within 90 days of admission. This set includes dispensings of all MI admissions and was merged with NDI cohort. This still contains MIs that occurred prior to and after the study inclusion period of 1/7/2012 and 30/6/2017, and will be removed when creating the analysis data set. 
+\color{violet}
+\begin{stlog}\input{log/11.log.tex}\end{stlog}
+\color{black}
+\pagebreak
+\subsection{Initial dispesning of medications}
+We collapsed dispensings tagged per medication class and occurring within 60 days of discharge. This set includes dispensings of all MI admissions and was merged with NDI cohort. This still contains MIs that occurred prior to and after the study inclusion period of 1/7/2012 and 30/6/2017, and will be removed when creating the analysis data set. 
+\color{violet}
+\begin{stlog}\input{log/12.log.tex}\end{stlog}
+\color{black}
+Using the dataset that contains identification of the secondary prevention medication dispensed, we created class specific sets of dispensings for use in the PDC calculation steps. These sets would include all dispensings of medications within each class across the study period
+\color{violet}
+\begin{stlog}\input{log/13.log.tex}\end{stlog}
+\color{black}
+\pagebreak
+\subsection{Proportions of days covered}
+\subsubsection{PBS item packsizes for determining days supply}
+We reported the use of PBS information to check pack size changs across the study period in a previous  \href{https://github.com/cardiopharmnerd/medsremote}{protocol}. This dataset was used for each drug class in order to assign packsizes for each drug class. 
+\subsubsection{PDC calculation parameters}c
+We created persistence measures acrosss each drug class for each participant per MI admission.
+The TEN-spiders tool for reporting was used to detail the steps, definitions, and assumptions used in calculating PDC. \cite{tenspiders} \\
+The method for this study was done with the following steps in mind:
+\begin{enumerate}
+\item Determine each observation's study period, which in this case is 365 days (admdate + 365), unless they died prior to this date, in which case the value is death date - MI discharge date (sepdate). Noting admissions where people died within 90 days of discharge were also excluded. 
+\item Count the days the patient was covered by the drug based on supply date, with adjusting for credit when supply date occurs prior to previous supply ending
+\item Divide number of covered days in step 2 by number of days (study date) in step 1
+\end{enumerate}
+\pagebreak
+\subsubection{Antiplatelets}
+\color{violet}
+\begin{stlog}\input{log/14.log.tex}\end{stlog}
+\color{black}
+\pagebreak
+\subsubection{Statins}
+\color{violet}
+\begin{stlog}\input{log/15.log.tex}\end{stlog}
+\color{black}
+\pagebreak
+\subsubection{High intensity statins}
+Using the previously created \verb{hstatin} tag, we removed any dispensings of non-high instensity statins, and performed the PDC calculation again. This does make the assumption that people took only whole doses of tablets, which may not be completely reflective of the cohort. For example, someone taking half a 40mg atorvastatin tablet is technically on medium intensity therapy, but classified as high intensity. 
+\color{violet}
+\begin{stlog}\input{log/16.log.tex}\end{stlog}
+\color{black}
+\pagebreak
+\subsubection{ACEi or ARB}
+\color{violet}
+\begin{stlog}\input{log/17.log.tex}\end{stlog}
+\color{black}
+\pagebreak
+\subsubection{Beta blockers}
+Due to differences in dosing regimens with beta blockers, a data informed approach was taken to atribute days supply from the packsizes of different beta blockers. \cite{pbsmellish}
+\color{violet}
+\begin{stlog}\input{log/18.log.tex}\end{stlog}
+\color{black}
+\pagebreak
+\subsection{Previous use of anticoagulants}
+Use of anticoagulant therapy (NOACs, warfarin, and heparins) in the 90 days prior to NSTEMI and 30 days following discharge were included as an adjustment for intial dispensing and use of secondary prevention medications. Namely, this was to address potential underuse of P2Y12i. This used the same PBS dataset as the secondary prevention medications.
+\color{violet}
+\begin{stlog}\input{log/19.log.tex}\end{stlog}
+\color{black}
+\pagebreak
+\subsection{Poly-pharmacy assignment}
+We reviewed all PBS dispensing data within NSTEMI admissions to extract how many different medications (by ATC) code were used in the 60 days prior to NSTEMI admission. The total number of medications was calculated by looking at how many unique ATC codes were dispensed in the 60 days prior to admission. This is not a detailed polypharmacy calculation, as it does not consider cumulative use of medications as other studies have considered when polypharmacy is a primary outome. \cite{polypharmacy2017} 
+\color{violet}
+\begin{stlog}\input{log/20.log.tex}\end{stlog}
+\color{black}
+\begin{figure} [h]
+	\centering
+	\includegraphics[width=0.5\textwidth]{hist_polypharm.pdf}
+	\caption{Histogram of number of regular medications pre-NSTEMI admission}
+	\label{hist_polypharm}
+\end{figure}
+
+
+\color{black}
+\pagebreak
+\section{Demographic assignment}
+\subsection{NSTEMI classification and co-morbidity assignment}
+This cohort also included STEMI cases, which will not be included in this analysis due to them often requiring rescue PCI at the time of the MI, and therefore will have a disproportionate number of PCI vs CABG cases.\cite{takeji2021} We assign comorbidity information based on ICD codes present within each index MI admission, including whether the MI was for STEMI or NSTEMI. \\
+We were able to use the comorbidities to describe the cohort, as well as compute frailty via Charlston Comoboridity Index (CCI)\cite{icdadmin}, and use comorbidity and frailty data for adjustment in the regression analysis. \\
+\color{violet}
+\begin{stlog}\input{log/21.log.tex}\end{stlog}
+\color{black}
+\pagebreak
+\subsection{Remoteness assignment}
+We used previously reported methods to assign a value of remoteness using the statistical local area of each indivudal at the time of their index MI. This remoteness value is mean Accessibility/Remoteness Index of Australia.\cite{aihwrural} \\
+In the previous study that focussed on remoteness, our \color{blue} \href{https://github.com/cardiopharmnerd/medsremote}{protocol} \color{black} detailed that those MI admissions with missing SLAs and therefore matching ARIA values would be exlcuded. However, for this study, we instead assigned the 3,601 MI admissions without a SLA the median ARIA value for the remainder of the Victorian cohort within the study period. 
+\color{violet}
+\begin{stlog}\input{log/22.log.tex}\end{stlog}
+\color{black}
+\pagebreak
+\subsection{Socioeconomic disadvantage assignment}
+The IRSD score for the postcode where the indiviudal was residing at the time closest to their MI was used for this step. Obtaining postcode information and linking to a dataset containing the corresponding IRSD value has been reported in the previous \color{blue} \href{https://github.com/cardiopharmnerd/medsremote}{protocol}. \color{black} This dataset has already excluded people outside of the study period, but does include non-Victorians. These MI admissions will be exlcuded during the preparation of the analysis dataset. There were originally 2,146 admissions missing postcode data, and the mean IRSD was assigned to those with missing postcode. In this cohort, there were only 1,748 admissions from the original dataset with missing postcode data that were present in this dataset. 
+\color{violet}
+\begin{stlog}\input{log/23.log.tex}\end{stlog}
+\color{black}
+\pagebreak
+\section{Clinical outcomes at 12 months}
+Using the NDI and VAED datasets, we determined the following clinical outcomes:
+\begin{itemize}
+\item All-cause death 
+\item Cardiovascular death
+\item Recurrent MI
+\item Stroke
+\item Revascularisation
+\end{itemize}
+\color{violet}
+\subsubsection{All-cause death}
+Information on any reported deaths is already present following the merge with the NDI dataset. This date (if present) will be used for all-cause death.
+\subsubsection{Cardiovascular death}
+This step involved merging a previous dataset containing the MI cohort from a previous study \color{blue} \href{https://github.com/cardiopharmnerd/medsremote}{protocol}. \color(black) This data was sourced from the NDI with a cardiovascular primary cause of death allowing for identifcation of cardiovascular death. 
+\begin{stlog}\input{log/24.log.tex}\end{stlog}
+\color{black}
+\begin{figure} [h]
+	\centering
+	\includegraphics[width=0.5\textwidth]{hist_cvd.pdf}
+	\caption{Histogram of cardiovascular deaths following NSTEMI}
+	\label{hist_cvd}
+\end{figure}
+\pagebreak
+\subsubsection{Stroke admission}
+\color{violet}
+\begin{stlog}\input{log/25.log.tex}\end{stlog}
+\color{black}
+\begin{figure} [h]
+	\centering
+	\includegraphics[width=0.5\textwidth]{hist_cvd.pdf}
+	\caption{Histogram of cardiovascular deaths following NSTEMI}
+	\label{hist_cvd}
+\end{figure}
+\color{violet}
+\begin{stlog}\input{log/26.log.tex}\end{stlog}
+\color{black}
+\subsubsection{recurrent MI admission}
+\color{violet}
+\begin{stlog}\input{log/27.log.tex}\end{stlog}
+\color{black}
+\begin{figure} [h]
+	\centering
+	\includegraphics[width=0.5\textwidth]{hist_recurrentmi.pdf}
+	\caption{Histogram of recurrent myocardial infarction following NSTEMI}
+	\label{hist_recurrentmi}
+\end{figure}
+
+\subsubsection{Admission for revascularisation}
+\color{black}
+\begin{stlog}\input{log/28.log.tex}\end{stlog}
+\color{black}
+\begin{figure} [h]
+	\centering
+	\includegraphics[width=0.5\textwidth]{hist_revascadm.pdf}
+	\caption{Histogram of admissions for revascularisation following NSTEMI}
+	\label{hist_revascadm}
+\end{figure}
+
+\pagebreak
+\section{Data analysis}
+\subsection{Creation of analysis dataset}
+Each of the separate datasetes throughout cohort creation, medication use and demographic information assignment were merged into one dataset. The final dataset contains information regarding all Victorian NSTEMI admissions.
+\color{violet}
+\begin{stlog}\input{log/29.log.tex}\end{stlog}
+\color{black}
+\pagebreak
+\subsection{Result tables}
+\subsection{Tables of total population characteristics}
+The analysis dataset contains information on STEMI as well as MI admissions where no revascularisation was performed. For the total table, we will exclude STEMI but include those without revasculrisation as a third arm to show those with no revasculisation. We created a variable to identity PCI only, CABG (with or without PCI), and no revascularisation. \\ 
+\color{violet}
+\begin{stlog}\input{log/30.log.tex}\end{stlog}
+\color{black}
+\pagebreak
+\subsection{Tables of analysed population characteristics}
+\color{violet}
+\begin{stlog}\input{log/31.log.tex}\end{stlog}
+\color{black}
+\pagebreak
+\subsection{Tables of clinical outcomes at 12 months for analysed cohort}
+\color{violet}
+\begin{stlog}\input{log/32.log.tex}\end{stlog}
+\color{black}
+\subsection{Tables of clinical outcomes at 12 months for analysed cohort}
+\color{violet}
+\begin{stlog}\input{log/33.log.tex}\end{stlog}
+\color{black}
+\pagebreak
+\subsection{Predicted probabilty of dispensing at 60 days at means of co-variates stratified by revascularisation}
+We predicted probabilities of dispensing for each medication class using logistic regression, stratified by reveascularisation strategy. We adjusted with mean values of the spline effects of age, ARIA and IRSD, and binary effects of CBD, HT, AF, DM, CHF, CPD, REND, DEM, and dispensing of anticoagulation in the 60 days prior to admission.
+\color{violet}
+\begin{stlog}\input{log/34.log.tex}\end{stlog}
+\color{black}
+\pagebreak
+\subsection{Predicted PDC at means of co-variates stratified by revascularisation}
+The same prediction data sets created in the initial dispensing analysis, however we applied a fractional regression analysis with a logit link function in order to predict the proportion of dats covered for each drug class, using the same adjusting variables. 
+\color{violet}
+\begin{stlog}\input{log/35.log.tex}\end{stlog}
+\color{black}
+\pagrebreak
+\subsection{Sensitivity analysis}
+There were a number of senstivity analyses performed to confirm the results generated. These included: 
+\begin{enumerate}
+\item Inclusion of first MI and no prior revascularisation only
+\item Inclusion of revascularisation that occurred during indexed MI admission
+\item Inclusion of revascularisation within 90 days
+\end{enumerate}
+It should be noted that the third sensitivity analysis being conducted includes events that occurred after the 60 dispensing cut off point for the first outcome, however as this is a sensitivity analysis, the methdological issue is acknowledged but not considered an error for this purpose. 
+\subsubsection{Inclusion of first MI only}
+\textbf{Creation}
+\color{violet}
+\begin{stlog}\input{log/36.log.tex}\end{stlog}
+\color{black}
+Therefore, 2,097 admissions involved a prior MI within the cohort window (2012-2017), and are removed from this analysis. The same analysis for predicted dispensing and PDC is then performed. \\~\\
+\textbf{Initial dispensing}
+\color{violet}
+\begin{stlog}\input{log/37.log.tex}\end{stlog}
+\color{black}
+\textbf{PDC at 12 months}
+\color{violet}
+\begin{stlog}\input{log/38.log.tex}\end{stlog}
+\color{black}
+\subsubsection{Inclusion of revascularisation that occurred during indexed MI admission}
+This sensitivity analysis reduced the time allowed for revascularisation to be considered part of the index MI to just the admission only. New set of covariates were created as part of this analysis and initial dispensing and PDC were predicted. 
+\textbf{Cohort creation}
+\color{violet}
+\begin{stlog}\input{log/39.log.tex}\end{stlog}
+\color{black}
+It can be seen that when adjusting the inclusion to be restricted to only the index MI admission, there are 442 PCI and 288 CABG that are performed within 30 days of the index NSTEMI admission. These will be excluded from the analysis. 
+\textbf{Initial dispensing}
+\color{violet}
+\begin{stlog}\input{log/40.log.tex}\end{stlog}
+\color{black}
+\textbf{PDC at 12 months}
+\color{violet}
+\begin{stlog}\input{log/41.log.tex}\end{stlog}
+\color{black}
+\subsubsection{Inclusion of revascularisation within 90 days}
+This analysis extends the window of inclusion for revascularisation to 90 days, which is reflective of the cutoffs used by the Victorian Cardiac Outcome Registry for PCI. \cite{vcor2022}
+\color{violet}
+\begin{stlog}\input{log/42.log.tex}\end{stlog}
+\color{black}
+It can be seen that when adjusting the inclusion to be include revascularisation up to 90 days following speration, there were 4 extra admissions classified as PCI, 149 extra admissions for CABG, and 5 admissions that were originally CABG who received subsequent PCI and therefore were classified as PCI. 
+\textbf{Initial dispensing}
+\color{violet}
+\begin{stlog}\input{log/43.log.tex}\end{stlog}
+\color{black}
+\textbf{PDC at 12 months}
+\color{violet}
+\begin{stlog}\input{log/44.log.tex}\end{stlog}
+\color{black}
+\textbf{Combine all sensitivity analysis with original analysis}
+\color{violet}
+\begin{stlog}\input{log/45.log.tex}\end{stlog}
+\clearpage
+\color{black}
+\bibliography{C:/Users/acliv1/Documents/library.bib}
+\end{document}
