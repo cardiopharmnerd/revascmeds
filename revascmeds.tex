@@ -79,7 +79,6 @@ The initial cohort, with removal of nested admissions, transfers and same-day ad
 \item CHF: Heart failure
 \item CPD: Chronic pulmonary disease
 \item NOAC: Non-vitaminm K oral anticoagulant
-\item DEM: Dementia
 \item DM: Diabetis mellitus
 \item DMNC: DM without chronic complications
 \item DMWC: Diabets with chronic complications
@@ -124,7 +123,7 @@ The objective of this study was to determine how revascularisation strategy foll
 		
 \section{MI cohort dataset creation}
 \subsection{Previously cleaned cohort import}
-We have used a previously cleaned cohort of people admitted with a prmiary diagnosis of MI from Victoria Hospitals. We cleaned nested admissions and transfers, creating unique episodes of care for each MI. This dataset was then merged with a dataset from the NDI, allowing for confirmation of dates of death during the follow up period (until 30/6/2018). 
+We have used a previously cleaned cohort of people admitted with a prmiary diagnosis of MI from Victorian Hospitals. We cleaned nested admissions and transfers, creating unique episodes of care for each MI. This dataset was then merged with a dataset from the NDI, allowing for confirmation of dates of death during the follow up period (until 30/6/2018). 
 
 \color{violet}
 \begin{stlog}\input{log/1.log.tex}\end{stlog}
@@ -249,28 +248,28 @@ The method for this study was done with the following steps in mind:
 \item Divide number of covered days in step 2 by number of days (study date) in step 1
 \end{enumerate}
 \pagebreak
-\subsubection{Antiplatelets}
+\subsubsection{Antiplatelets}
 \color{violet}
 \begin{stlog}\input{log/14.log.tex}\end{stlog}
 \color{black}
 \pagebreak
-\subsubection{Statins}
+\subsubsection{Statins}
 \color{violet}
 \begin{stlog}\input{log/15.log.tex}\end{stlog}
 \color{black}
 \pagebreak
-\subsubection{High intensity statins}
+\subsubsection{High intensity statins}
 Using the previously created \verb{hstatin} tag, we removed any dispensings of non-high instensity statins, and performed the PDC calculation again. This does make the assumption that people took only whole doses of tablets, which may not be completely reflective of the cohort. For example, someone taking half a 40mg atorvastatin tablet is technically on medium intensity therapy, but classified as high intensity. 
 \color{violet}
 \begin{stlog}\input{log/16.log.tex}\end{stlog}
 \color{black}
 \pagebreak
-\subsubection{ACEi or ARB}
+\subsubsection{ACEi or ARB}
 \color{violet}
 \begin{stlog}\input{log/17.log.tex}\end{stlog}
 \color{black}
 \pagebreak
-\subsubection{Beta blockers}
+\subsubsection{Beta blockers}
 Due to differences in dosing regimens with beta blockers, a data informed approach was taken to atribute days supply from the packsizes of different beta blockers. \cite{pbsmellish}
 \color{violet}
 \begin{stlog}\input{log/18.log.tex}\end{stlog}
@@ -328,9 +327,9 @@ Using the NDI and VAED datasets, we determined the following clinical outcomes:
 \item Revascularisation
 \end{itemize}
 \color{violet}
-\subsubsection{All-cause death}
+\subsection{All-cause death}
 Information on any reported deaths is already present following the merge with the NDI dataset. This date (if present) will be used for all-cause death.
-\subsubsection{Cardiovascular death}
+\subsection{Cardiovascular death}
 This step involved merging a previous dataset containing the MI cohort from a previous study \color{blue} \href{https://github.com/cardiopharmnerd/medsremote}{protocol}. \color(black) This data was sourced from the NDI with a cardiovascular primary cause of death allowing for identifcation of cardiovascular death. 
 \begin{stlog}\input{log/24.log.tex}\end{stlog}
 \color{black}
@@ -341,7 +340,7 @@ This step involved merging a previous dataset containing the MI cohort from a pr
 	\label{hist_cvd}
 \end{figure}
 \pagebreak
-\subsubsection{Stroke admission}
+\subsection{Stroke admission}
 \color{violet}
 \begin{stlog}\input{log/25.log.tex}\end{stlog}
 \color{black}
@@ -354,7 +353,7 @@ This step involved merging a previous dataset containing the MI cohort from a pr
 \color{violet}
 \begin{stlog}\input{log/26.log.tex}\end{stlog}
 \color{black}
-\subsubsection{recurrent MI admission}
+\subsection{recurrent MI admission}
 \color{violet}
 \begin{stlog}\input{log/27.log.tex}\end{stlog}
 \color{black}
@@ -365,7 +364,7 @@ This step involved merging a previous dataset containing the MI cohort from a pr
 	\label{hist_recurrentmi}
 \end{figure}
 
-\subsubsection{Admission for revascularisation}
+\subsection{Admission for revascularisation}
 \color{black}
 \begin{stlog}\input{log/28.log.tex}\end{stlog}
 \color{black}
@@ -406,15 +405,21 @@ The analysis dataset contains information on STEMI as well as MI admissions wher
 \color{black}
 \pagebreak
 \subsection{Predicted probabilty of dispensing at 60 days at means of co-variates stratified by revascularisation}
-We predicted probabilities of dispensing for each medication class using logistic regression, stratified by reveascularisation strategy. We adjusted with mean values of the spline effects of age, ARIA and IRSD, and binary effects of CBD, HT, AF, DM, CHF, CPD, REND, DEM, and dispensing of anticoagulation in the 60 days prior to admission.
+We predicted probabilities of dispensing for each medication class using logistic regression, stratified by reveascularisation strategy. We adjusted with mean values of the spline effects of age, ARIA and IRSD, and binary effects of CBD, HT, AF, DM, CHF, CPD, REND, and dispensing of anticoagulation in the 60 days prior to admission.
 \color{violet}
 \begin{stlog}\input{log/34.log.tex}\end{stlog}
+\color{black}
+\pagebreak
+\subsubsection{Predited dispensing of P2Y12i per year for CABG}
+Due to the difference noted in P2Y12 dispensing, and the introduction of P2Y12 recommendations from 2012, year on year dispesning was predicted for this class of medications in those receiving CABG. 
+\color{violet}
+\begin{stlog}\input{log/35.log.tex}\end{stlog}
 \color{black}
 \pagebreak
 \subsection{Predicted PDC at means of co-variates stratified by revascularisation}
 The same prediction data sets created in the initial dispensing analysis, however we applied a fractional regression analysis with a logit link function in order to predict the proportion of dats covered for each drug class, using the same adjusting variables. 
 \color{violet}
-\begin{stlog}\input{log/35.log.tex}\end{stlog}
+\begin{stlog}\input{log/36.log.tex}\end{stlog}
 \color{black}
 \pagrebreak
 \subsection{Sensitivity analysis}
@@ -428,49 +433,49 @@ It should be noted that the third sensitivity analysis being conducted includes 
 \subsubsection{Inclusion of first MI only}
 \textbf{Creation}
 \color{violet}
-\begin{stlog}\input{log/36.log.tex}\end{stlog}
+\begin{stlog}\input{log/37.log.tex}\end{stlog}
 \color{black}
 Therefore, 2,097 admissions involved a prior MI within the cohort window (2012-2017), and are removed from this analysis. The same analysis for predicted dispensing and PDC is then performed. \\~\\
 \textbf{Initial dispensing}
 \color{violet}
-\begin{stlog}\input{log/37.log.tex}\end{stlog}
+\begin{stlog}\input{log/38.log.tex}\end{stlog}
 \color{black}
 \textbf{PDC at 12 months}
 \color{violet}
-\begin{stlog}\input{log/38.log.tex}\end{stlog}
+\begin{stlog}\input{log/39.log.tex}\end{stlog}
 \color{black}
 \subsubsection{Inclusion of revascularisation that occurred during indexed MI admission}
 This sensitivity analysis reduced the time allowed for revascularisation to be considered part of the index MI to just the admission only. New set of covariates were created as part of this analysis and initial dispensing and PDC were predicted. 
 \textbf{Cohort creation}
 \color{violet}
-\begin{stlog}\input{log/39.log.tex}\end{stlog}
+\begin{stlog}\input{log/40.log.tex}\end{stlog}
 \color{black}
 It can be seen that when adjusting the inclusion to be restricted to only the index MI admission, there are 442 PCI and 288 CABG that are performed within 30 days of the index NSTEMI admission. These will be excluded from the analysis. 
 \textbf{Initial dispensing}
 \color{violet}
-\begin{stlog}\input{log/40.log.tex}\end{stlog}
+\begin{stlog}\input{log/41.log.tex}\end{stlog}
 \color{black}
 \textbf{PDC at 12 months}
 \color{violet}
-\begin{stlog}\input{log/41.log.tex}\end{stlog}
+\begin{stlog}\input{log/42.log.tex}\end{stlog}
 \color{black}
 \subsubsection{Inclusion of revascularisation within 90 days}
 This analysis extends the window of inclusion for revascularisation to 90 days, which is reflective of the cutoffs used by the Victorian Cardiac Outcome Registry for PCI. \cite{vcor2022}
 \color{violet}
-\begin{stlog}\input{log/42.log.tex}\end{stlog}
+\begin{stlog}\input{log/43.log.tex}\end{stlog}
 \color{black}
 It can be seen that when adjusting the inclusion to be include revascularisation up to 90 days following speration, there were 4 extra admissions classified as PCI, 149 extra admissions for CABG, and 5 admissions that were originally CABG who received subsequent PCI and therefore were classified as PCI. 
 \textbf{Initial dispensing}
 \color{violet}
-\begin{stlog}\input{log/43.log.tex}\end{stlog}
+\begin{stlog}\input{log/44.log.tex}\end{stlog}
 \color{black}
 \textbf{PDC at 12 months}
 \color{violet}
-\begin{stlog}\input{log/44.log.tex}\end{stlog}
+\begin{stlog}\input{log/45.log.tex}\end{stlog}
 \color{black}
 \textbf{Combine all sensitivity analysis with original analysis}
 \color{violet}
-\begin{stlog}\input{log/45.log.tex}\end{stlog}
+\begin{stlog}\input{log/46.log.tex}\end{stlog}
 \clearpage
 \color{black}
 \bibliography{C:/Users/acliv1/Documents/library.bib}

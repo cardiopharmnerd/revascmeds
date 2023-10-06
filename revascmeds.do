@@ -83,7 +83,6 @@ The initial cohort, with removal of nested admissions, transfers and same-day ad
 \item CHF: Heart failure
 \item CPD: Chronic pulmonary disease
 \item NOAC: Non-vitaminm K oral anticoagulant
-\item DEM: Dementia
 \item DM: Diabetis mellitus
 \item DMNC: DM without chronic complications
 \item DMWC: Diabets with chronic complications
@@ -128,7 +127,7 @@ The objective of this study was to determine how revascularisation strategy foll
 		
 \section{MI cohort dataset creation}
 \subsection{Previously cleaned cohort import}
-We have used a previously cleaned cohort of people admitted with a prmiary diagnosis of MI from Victoria Hospitals. We cleaned nested admissions and transfers, creating unique episodes of care for each MI. This dataset was then merged with a dataset from the NDI, allowing for confirmation of dates of death during the follow up period (until 30/6/2018). 
+We have used a previously cleaned cohort of people admitted with a prmiary diagnosis of MI from Victorian Hospitals. We cleaned nested admissions and transfers, creating unique episodes of care for each MI. This dataset was then merged with a dataset from the NDI, allowing for confirmation of dates of death during the follow up period (until 30/6/2018). 
 
 \color{violet}
 ***/
@@ -579,7 +578,7 @@ The method for this study was done with the following steps in mind:
 \item Divide number of covered days in step 2 by number of days (study date) in step 1
 \end{enumerate}
 \pagebreak
-\subsubection{Antiplatelets}
+\subsubsection{Antiplatelets}
 \color{violet}
 ***/
 
@@ -692,7 +691,7 @@ texdoc stlog close
 /***
 \color{black}
 \pagebreak
-\subsubection{Statins}
+\subsubsection{Statins}
 \color{violet}
 ***/
 
@@ -810,7 +809,7 @@ texdoc stlog close
 /***
 \color{black}
 \pagebreak
-\subsubection{High intensity statins}
+\subsubsection{High intensity statins}
 Using the previously created \verb{hstatin} tag, we removed any dispensings of non-high instensity statins, and performed the PDC calculation again. This does make the assumption that people took only whole doses of tablets, which may not be completely reflective of the cohort. For example, someone taking half a 40mg atorvastatin tablet is technically on medium intensity therapy, but classified as high intensity. 
 \color{violet}
 ***/
@@ -928,7 +927,7 @@ texdoc stlog close
 /***
 \color{black}
 \pagebreak
-\subsubection{ACEi or ARB}
+\subsubsection{ACEi or ARB}
 \color{violet}
 ***/
 
@@ -1039,7 +1038,7 @@ texdoc stlog close
 /***
 \color{black}
 \pagebreak
-\subsubection{Beta blockers}
+\subsubsection{Beta blockers}
 Due to differences in dosing regimens with beta blockers, a data informed approach was taken to atribute days supply from the packsizes of different beta blockers. \cite{pbsmellish}
 \color{violet}
 ***/
@@ -1328,7 +1327,6 @@ gen AF = 0
 gen AFL = 0
 
 *Charlson comorbidities
-gen DEM = 0
 gen MIC = 0
 gen CHF = 0
 gen PVD = 0
@@ -1352,7 +1350,6 @@ replace HT = 1 if inrange(tdiag`ii',"I10","I1599") | substr(tdiag`ii',1,4) == "U
 replace AF = 1 if inrange(tdiag`ii', "I48","I4899")
 replace AFL =1 if substr(tdiag`ii',1,4) == "I482" | substr(tdiag`ii',1,4) == "I483" |substr(tdiag`ii',1,4) == "I484"
 
-replace DEM = 1 if inrange(tdiag`ii',"F00","F0399") | substr(tdiag`ii',1,3) == "G30" | substr(tdiag`ii',1,3) == "U79" | tdiag`ii' == "F051"
 replace MIC = 1 if substr(tdiag`ii',1,3) == "I21" | substr(tdiag`ii',1,3) == "I22" | tdiag`ii' == "I252"
 replace CHF = 1 if tdiag`ii' == "I099" | tdiag`ii' == "I110" | tdiag`ii' == "I130" | tdiag`ii' == "I132" | tdiag`ii' == "I255" | tdiag`ii' == "I420" | inrange(tdiag`ii',"I425","I4299") | substr(tdiag`ii',1,3) == "I43" | substr(tdiag`ii',1,3) == "I50" | tdiag`ii' == "P290"
 replace PVD = 1 if substr(tdiag`ii',1,3) == "I70" | substr(tdiag`ii',1,3) == "I71" | tdiag`ii' == "I731" | tdiag`ii' == "I738" | tdiag`ii' == "I739" | tdiag`ii' == "I771" | tdiag`ii' == "I790" | tdiag`ii' == "I792" | tdiag`ii' == "K551" | tdiag`ii' == "K558" | tdiag`ii' == "K559" | tdiag`ii' == "Z958" | tdiag`ii' == "Z959"
@@ -1464,9 +1461,9 @@ Using the NDI and VAED datasets, we determined the following clinical outcomes:
 \item Revascularisation
 \end{itemize}
 \color{violet}
-\subsubsection{All-cause death}
+\subsection{All-cause death}
 Information on any reported deaths is already present following the merge with the NDI dataset. This date (if present) will be used for all-cause death.
-\subsubsection{Cardiovascular death}
+\subsection{Cardiovascular death}
 This step involved merging a previous dataset containing the MI cohort from a previous study \color{blue} \href{https://github.com/cardiopharmnerd/medsremote}{protocol}. \color(black) This data was sourced from the NDI with a cardiovascular primary cause of death allowing for identifcation of cardiovascular death. 
 ***/
 
@@ -1502,7 +1499,7 @@ texdoc stlog close
 	\label{hist_cvd}
 \end{figure}
 \pagebreak
-\subsubsection{Stroke admission}
+\subsection{Stroke admission}
 \color{violet}
 ***/
 
@@ -1566,7 +1563,7 @@ texdoc stlog close
 
 /***
 \color{black}
-\subsubsection{recurrent MI admission}
+\subsection{recurrent MI admission}
 \color{violet}
 ***/
 
@@ -1598,7 +1595,7 @@ texdoc stlog close
 	\label{hist_recurrentmi}
 \end{figure}
 
-\subsubsection{Admission for revascularisation}
+\subsection{Admission for revascularisation}
 \color{black}
 ***/
 
@@ -1829,7 +1826,6 @@ ta CHF rid if CHF== 1, 						matcell(B9)
 ta CPD rid if CPD == 1, 					matcell(B10)
 ta PVD rid if PVD == 1, 					matcell(B11)
 ta REND rid if REND == 1, 					matcell(B12)
-ta DEM rid if DEM == 1, 					matcell(B13)
 ta prevPCI rid if prevPCI == 1, 			matcell(B14)
 ta prevCABG rid if prevCABG == 1, 			matcell(B15)
 ta hosp_mort rid if hosp_mort == 1, 		matcell(B16)
@@ -1847,7 +1843,7 @@ ta beta_60 rid if beta_60 == 1, 			matcell(B26)
 ta OMT rid, 								matcell(B27)
 
 
-matrix B = (B1\B2\B3\B4\B5\B6\B7\B8\B9\B10\B11\B12\B13\B14\B15\B16\B17\B18\B19\B20\B21\B22\B23\B24\B28\B25\B26\B27)
+matrix B = (B1\B2\B3\B4\B5\B6\B7\B8\B9\B10\B11\B12\B14\B15\B16\B17\B18\B19\B20\B21\B22\B23\B24\B28\B25\B26\B27)
 matrix list B
 clear
 svmat B
@@ -1885,28 +1881,27 @@ replace name = "Heart failure" if 						_n == 14
 replace name = "Chronic pulmonary disease" if 			_n == 15
 replace name = "Peripeheral vascular disease" if		_n == 16
 replace name = "Renal disease" if					 	_n == 17
-replace name = "Dementia" if 							_n == 18
-replace name = "Previous PCI" if 						_n == 19
-replace name = "Previous CABG" if 						_n == 20
-replace name = "Died during admission" if				_n == 21
-replace name = "Died within 90 days of discharge" if	_n == 22
-replace name = "Metropolitan" if 						_n == 23
-replace name = "Inner regional" if						_n == 24
-replace name = "Outer regional" if 						_n == 25
-replace name = "Prior P2Y12 inhibitor" if				_n == 26
-replace name = "Prior Statin" if						_n == 27
-replace name = "Prior ACE inhibitor or ARB" if			_n == 28
-replace name = "Prior beta blocker"  if		 			_n == 29
-replace name = "P2Y12 inhibitor"  if				 	_n == 30
-replace name = "Statin" if								_n == 31
-replace name = "High intensity statin" if				_n == 32
-replace name = "ACE inhibitor or ARB" if 				_n == 33
-replace name = "Beta blocker" if					 	_n == 34
-replace name = "No medication classes dispensed" if		_n == 35
-replace name = "One medication classes dispensed" if 	_n == 36
-replace name = "Two medication classes dispensed" if 	_n == 37
-replace name = "Three medication classes dispensed" if	_n == 38
-replace name = "Four medication classes dispensed"  if 	_n == 39
+replace name = "Previous PCI" if 						_n == 18
+replace name = "Previous CABG" if 						_n == 19
+replace name = "Died during admission" if				_n == 20
+replace name = "Died within 90 days of discharge" if	_n == 21
+replace name = "Metropolitan" if 						_n == 22
+replace name = "Inner regional" if						_n == 23
+replace name = "Outer regional" if 						_n == 24
+replace name = "Prior P2Y12 inhibitor" if				_n == 25
+replace name = "Prior Statin" if						_n == 26
+replace name = "Prior ACE inhibitor or ARB" if			_n == 27
+replace name = "Prior beta blocker"  if		 			_n == 28
+replace name = "P2Y12 inhibitor"  if				 	_n == 29
+replace name = "Statin" if								_n == 30
+replace name = "High intensity statin" if				_n == 31
+replace name = "ACE inhibitor or ARB" if 				_n == 32
+replace name = "Beta blocker" if					 	_n == 33
+replace name = "No medication classes dispensed" if		_n == 34
+replace name = "One medication classes dispensed" if 	_n == 35
+replace name = "Two medication classes dispensed" if 	_n == 36
+replace name = "Three medication classes dispensed" if	_n == 37
+replace name = "Four medication classes dispensed"  if 	_n == 38
 
 
 
@@ -1980,17 +1975,17 @@ rename `i's `i'
 }
 append using irsdtot
 append using polytot
-replace id = 25.5 if id == . & name == "Median IRSD score (IQR)"
-replace id = 29.5 if id == .
+replace id = 24.5 if id == . & name == "Median IRSD score (IQR)"
+replace id = 28.5 if id == .
 sort id
 drop id
 gen category = ""
 replace category = "Baseline characteristics" if _n == 2
 replace category = "Co-morbidities" if _n == 9
-replace category = "Mortality" if _n == 21
-replace category = "Remoteness and socio-economic status" if _n == 23
-replace category = "Medications dispensed within 90 days prior to MI admission" if _n == 27
-replace category = "Medications dispensed within 60 days following MI admission" if _n == 32
+replace category = "Mortality" if _n == 20
+replace category = "Remoteness and socio-economic status" if _n == 22
+replace category = "Medications dispensed within 90 days prior to MI admission" if _n == 26
+replace category = "Medications dispensed within 60 days following MI admission" if _n == 31
 order category
 save table_totaldemo, replace
 use table_totaldemo, clear
@@ -2021,7 +2016,6 @@ ta CHF rid if CHF== 1, 						matcell(B9)
 ta CPD rid if CPD == 1, 					matcell(B10)
 ta PVD rid if PVD == 1, 					matcell(B11)
 ta REND rid if REND == 1, 					matcell(B12)
-ta DEM rid if DEM == 1, 					matcell(B13)
 ta prevPCI rid if prevPCI == 1, 			matcell(B14)
 ta prevCABG rid if prevCABG == 1, 			matcell(B15)
 ta hosp_mort rid if hosp_mort == 1, 		matcell(B16)
@@ -2039,7 +2033,7 @@ ta beta_60 rid if beta_60 == 1, 			matcell(B26)
 ta OMT rid, 								matcell(B27)
 
 
-matrix B = (B1\B2\B3\B4\B5\B6\B7\B8\B9\B10\B11\B12\B13\B14\B15\B18\B19\B20\B21\B22\B23\B24\B28\B25\B26\B27)
+matrix B = (B1\B2\B3\B4\B5\B6\B7\B8\B9\B10\B11\B12\B14\B15\B18\B19\B20\B21\B22\B23\B24\B28\B25\B26\B27)
 matrix list B
 clear
 svmat B
@@ -2077,26 +2071,25 @@ replace name = "Heart failure" if 						_n == 14
 replace name = "Chronic pulmonary disease" if 			_n == 15
 replace name = "Peripeheral vascular disease" if		_n == 16
 replace name = "Renal disease" if					 	_n == 17
-replace name = "Dementia" if 							_n == 18
-replace name = "Previous PCI" if 						_n == 19
-replace name = "Previous CABG" if 						_n == 20
-replace name = "Metropolitan" if 						_n == 21
-replace name = "Inner regional" if						_n == 22
-replace name = "Outer regional" if 						_n == 23
-replace name = "Prior P2Y12 inhibitor" if				_n == 24
-replace name = "Prior Statin" if						_n == 25
-replace name = "Prior ACE inhibitor or ARB" if			_n == 26
-replace name = "Prior beta blocker"  if		 			_n == 27
-replace name = "P2Y12 inhibitor"  if				 	_n == 28
-replace name = "Statin" if								_n == 29
-replace name = "High intensity statin" if 				_n == 30
-replace name = "ACE inhibitor or ARB" if 				_n == 31
-replace name = "Beta blocker" if					 	_n == 32
-replace name = "No medication classes dispensed" if		_n == 33
-replace name = "One medication classes dispensed" if 	_n == 34
-replace name = "Two medication classes dispensed" if 	_n == 35
-replace name = "Three medication classes dispensed" if	_n == 36
-replace name = "Four medication classes dispensed"  if 	_n == 37
+replace name = "Previous PCI" if 						_n == 18
+replace name = "Previous CABG" if 						_n == 19
+replace name = "Metropolitan" if 						_n == 20
+replace name = "Inner regional" if						_n == 21
+replace name = "Outer regional" if 						_n == 22
+replace name = "Prior P2Y12 inhibitor" if				_n == 23
+replace name = "Prior Statin" if						_n == 24
+replace name = "Prior ACE inhibitor or ARB" if			_n == 25
+replace name = "Prior beta blocker"  if		 			_n == 26
+replace name = "P2Y12 inhibitor"  if				 	_n == 27
+replace name = "Statin" if								_n == 28
+replace name = "High intensity statin" if 				_n == 29
+replace name = "ACE inhibitor or ARB" if 				_n == 30
+replace name = "Beta blocker" if					 	_n == 31
+replace name = "No medication classes dispensed" if		_n == 32
+replace name = "One medication classes dispensed" if 	_n == 33
+replace name = "Two medication classes dispensed" if 	_n == 34
+replace name = "Three medication classes dispensed" if	_n == 35
+replace name = "Four medication classes dispensed"  if 	_n == 36
 
 
 
@@ -2168,16 +2161,16 @@ rename `i's `i'
 }
 append using irsdanal
 append using polyanal
-replace id = 23.5 if id == . 
-replace id = 27.5 if id == 23.5 & name == "Median number of medications (IQR)"
+replace id = 22.5 if id == . 
+replace id = 26.5 if id == 22.5 & name == "Median number of medications (IQR)"
 sort id
 drop id
 gen category = ""
 replace category = "Baseline characteristics" if _n == 2
 replace category = "Co-morbidities" if _n == 9
-replace category = "Remoteness and socio-economic status" if _n == 21
-replace category = "Medications dispensed within 90 days prior to MI admission" if _n == 25
-replace category = "Medications dispensed within 60 days following MI admission" if _n == 30
+replace category = "Remoteness and socio-economic status" if _n == 20
+replace category = "Medications dispensed within 90 days prior to MI admission" if _n == 24
+replace category = "Medications dispensed within 60 days following MI admission" if _n == 29
 order category
 save table_analdemo, replace
 use table_analdemo, clear
@@ -2320,7 +2313,7 @@ texdoc stlog close
 \color{black}
 \pagebreak
 \subsection{Predicted probabilty of dispensing at 60 days at means of co-variates stratified by revascularisation}
-We predicted probabilities of dispensing for each medication class using logistic regression, stratified by reveascularisation strategy. We adjusted with mean values of the spline effects of age, ARIA and IRSD, and binary effects of CBD, HT, AF, DM, CHF, CPD, REND, DEM, and dispensing of anticoagulation in the 60 days prior to admission.
+We predicted probabilities of dispensing for each medication class using logistic regression, stratified by reveascularisation strategy. We adjusted with mean values of the spline effects of age, ARIA and IRSD, and binary effects of CBD, HT, AF, DM, CHF, CPD, REND, and dispensing of anticoagulation in the 60 days prior to admission.
 \color{violet}
 ***/
 
@@ -2346,7 +2339,7 @@ save ads_revasc_spline, replace
 
 forval ii = 1/2 {
 use ads_revasc_spline, clear
-foreach i in agespline sex priorMI CBD HT AF DM CHF CPD PVD REND DEM IRSD_score mean_ARIA anticoag polypharm p2y12_60 statin_60 hstatin_60 ace_arb_60 beta_60 {
+foreach i in agespline sex priorMI CBD HT AF DM CHF CPD PVD REND IRSD_score mean_ARIA anticoag polypharm p2y12_60 statin_60 hstatin_60 ace_arb_60 beta_60 {
 su(`i') if rid == `ii'
 local m`i' = r(mean)
 }
@@ -2354,7 +2347,7 @@ clear
 set obs 1
 gen rid = `ii'
 br
-foreach i in agespline sex priorMI CBD HT AF DM CHF CPD PVD REND DEM IRSD_score mean_ARIA anticoag polypharm p2y12_60 statin_60 hstatin_60 ace_arb_60 beta_60 {
+foreach i in agespline sex priorMI CBD HT AF DM CHF CPD PVD REND IRSD_score mean_ARIA anticoag polypharm p2y12_60 statin_60 hstatin_60 ace_arb_60 beta_60 {
 gen `i' = `m`i''
 }
 mkspline ARIAS= mean_ARIA, cubic knots(0 0.05 0.5 2)
@@ -2385,7 +2378,7 @@ drop agespline
 mkspline IRSDspline = IRSD_score, cubic knots(780 964 1004 1051) 
 
 
-logistic `i'_60 c.ARIAS* c.ages* sex c.IRSDspline* i.priorMI i.CBD i.HT i.AF i.DM i.CHF i.CPD i.PVD i.REND i.DEM i.anticoag c.polypharm if rid ==`ii', coef
+logistic `i'_60 c.ARIAS* c.ages* sex c.IRSDspline* i.priorMI i.CBD i.HT i.AF i.DM i.CHF i.CPD i.PVD i.REND i.anticoag c.polypharm if rid ==`ii', coef
 
 use analysis_adherence_set_`ii', clear
 *create prediction variable from model, then transform into probabability
@@ -2472,6 +2465,87 @@ graph save "G:\Adam\Project - revasc and outcome prediction\Results\fig_disp", r
 
 texdoc stlog close
 
+
+/***
+\color{black}
+\pagebreak
+\subsubsection{Predited dispensing of P2Y12i per year for CABG}
+Due to the difference noted in P2Y12 dispensing, and the introduction of P2Y12 recommendations from 2012, year on year dispesning was predicted for this class of medications in those receiving CABG. 
+\color{violet}
+***/
+
+texdoc stlog, cmdlog nodo
+
+
+use ads_revasc_spline, clear
+ta rid
+
+gen sepyear = 1
+replace sepyear = 2 if spedate >= td(1/7/2013)
+replace sepyear = 3 if spedate >= td(1/7/2014)
+replace sepyear = 4 if spedate >= td(1/7/2015)
+replace sepyear = 5 if spedate >= td(1/7/2016)
+
+order ppn agregroup sex admdate sepdate sepyear
+
+ta p2y12_60 sepyear if rid == 2, col chi
+
+forval ii = 1/5 {
+use ads_revasc_spline, clear
+
+gen sepyear = 1
+replace sepyear = 2 if spedate >= td(1/7/2013)
+replace sepyear = 3 if spedate >= td(1/7/2014)
+replace sepyear = 4 if spedate >= td(1/7/2015)
+replace sepyear = 5 if spedate >= td(1/7/2016)
+
+
+*create splines for remoteness
+mkspline ARIAS = mean_ARIA, cubic knots(0 0.05 0.5 2)
+*create splines for ages
+mkspline ages = agegroup, cubic knots(32.5 62.5 72.5 77.5)
+drop agespline
+*create splines for IRSD
+mkspline IRSDspline = IRSD_score, cubic knots(780 964 1004 1051) 
+
+
+logistic p2y12_60 c.ARIAS* c.ages* sex c.IRSDspline* i.priorMI i.CBD i.HT i.AF i.DM i.CHF i.CPD i.PVD i.REND i.anticoag c.polypharm if rid == 2 & sepyear == `ii', coef
+
+use analysis_adherence_set_2, clear
+*create prediction variable from model, then transform into probabability
+predict A
+predict xb, xb
+*create SE to build confidence intervals
+predict B, stdp
+gen ll = xb - (invnormal(0.975)*B)
+gen ul = xb + (invnormal(0.975)*B)
+replace ll = invlogit(ll)
+replace ul = invlogit(ul)
+keep A ul ll rid
+
+save disp_predict_p2y12_year`ii', replace
+
+}
+
+use disp_predict_p2y12_year1, clear
+forval ii = 2/5 {
+append using disp_predict_p2y12_year`ii'
+}
+gen sepyear = _n
+label define sepyear 1 "2012-2013" 2 "2013-2014" 3 "2014-2015" 4 "2015-2016" 5 "2016-2017"
+label values sepyear sepyear
+order sepyear A ll ul
+gen Astring = string(A, "%3.2f")
+gen llstring = string(ll, "%3.2f")
+gen ulstring = string(ul, "%3.2f")
+gen P2Y12 = Astring + " " + "(" + llstring + "_" + ulstring + ")"
+keep sepyear P2Y12
+save table_disp_predict_p2y12_years, replace
+
+
+texdoc stlog close
+
+
 /***
 \color{black}
 \pagebreak
@@ -2496,7 +2570,7 @@ drop agespline
 mkspline IRSDspline = IRSD_score, cubic knots(780 964 1004 1051) 
 
 
-fracreg logit PDC_`i' c.ARIAS* c.ages* sex c.IRSDspline* i.priorMI i.CBD i.HT i.AF i.DM i.CHF i.CPD i.PVD i.REND i.DEM i.anticoag c.polypharm if rid ==`ii'
+fracreg logit PDC_`i' c.ARIAS* c.ages* sex c.IRSDspline* i.priorMI i.CBD i.HT i.AF i.DM i.CHF i.CPD i.PVD i.REND  i.anticoag c.polypharm if rid ==`ii'
 
 use analysis_adherence_set_`ii', clear
 *create prediction variable from model, then transform into probabability
@@ -2629,7 +2703,7 @@ save ads_revasc_spline_sa_nopriormi, replace
 
 forval ii = 1/2 {
 use ads_revasc_spline_sa_nopriormi, clear
-foreach i in agespline sex priorMI CBD HT AF DM CHF CPD PVD REND DEM IRSD_score mean_ARIA anticoag polypharm {
+foreach i in agespline sex priorMI CBD HT AF DM CHF CPD PVD REND  IRSD_score mean_ARIA anticoag polypharm {
 su(`i') if rid == `ii'
 local m`i' = r(mean)
 }
@@ -2637,7 +2711,7 @@ clear
 set obs 1
 gen rid = `ii'
 br
-foreach i in agespline sex priorMI CBD HT AF DM CHF CPD PVD REND DEM IRSD_score mean_ARIA anticoag polypharm {
+foreach i in agespline sex priorMI CBD HT AF DM CHF CPD PVD REND  IRSD_score mean_ARIA anticoag polypharm {
 gen `i' = `m`i''
 }
 mkspline ARIAS= mean_ARIA, cubic knots(0 0.05 0.5 2)
@@ -2667,7 +2741,7 @@ drop agespline
 mkspline IRSDspline = IRSD_score, cubic knots(780 964 1004 1051) 
 
 
-logistic `i'_60 c.ARIAS* c.ages* sex c.IRSDspline* i.priorMI i.CBD i.HT i.AF i.DM i.CHF i.CPD i.PVD i.REND i.DEM i.anticoag c.polypharm if rid ==`ii', coef
+logistic `i'_60 c.ARIAS* c.ages* sex c.IRSDspline* i.priorMI i.CBD i.HT i.AF i.DM i.CHF i.CPD i.PVD i.REND  i.anticoag c.polypharm if rid ==`ii', coef
 
 use analysis_adherence_set_sa_nopriormi_`ii', clear
 *create prediction variable from model, then transform into probabability
@@ -2747,7 +2821,7 @@ drop agespline
 mkspline IRSDspline = IRSD_score, cubic knots(780 964 1004 1051) 
 
 
-fracreg logit PDC_`i' c.ARIAS* c.ages* sex c.IRSDspline* i.priorMI i.CBD i.HT i.AF i.DM i.CHF i.CPD i.PVD i.REND i.DEM i.anticoag c.polypharm if rid ==`ii'
+fracreg logit PDC_`i' c.ARIAS* c.ages* sex c.IRSDspline* i.priorMI i.CBD i.HT i.AF i.DM i.CHF i.CPD i.PVD i.REND  i.anticoag c.polypharm if rid ==`ii'
 
 use analysis_adherence_set_sa_nopriormi_`ii', clear
 *create prediction variable from model, then transform into probabability
@@ -2858,7 +2932,7 @@ save ads_revasc_spline_sa_admrevasc, replace
 
 forval ii = 1/2 {
 use ads_revasc_spline_sa_admrevasc, clear
-foreach i in agespline sex priorMI CBD HT AF DM CHF CPD PVD REND DEM IRSD_score mean_ARIA anticoag polypharm {
+foreach i in agespline sex priorMI CBD HT AF DM CHF CPD PVD REND IRSD_score mean_ARIA anticoag polypharm {
 su(`i') if rid == `ii'
 local m`i' = r(mean)
 }
@@ -2866,7 +2940,7 @@ clear
 set obs 1
 gen rid = `ii'
 br
-foreach i in agespline sex priorMI CBD HT AF DM CHF CPD PVD REND DEM IRSD_score mean_ARIA anticoag polypharm {
+foreach i in agespline sex priorMI CBD HT AF DM CHF CPD PVD REND IRSD_score mean_ARIA anticoag polypharm {
 gen `i' = `m`i''
 }
 mkspline ARIAS= mean_ARIA, cubic knots(0 0.05 0.5 2)
@@ -2896,7 +2970,7 @@ drop agespline
 mkspline IRSDspline = IRSD_score, cubic knots(780 964 1004 1051) 
 
 
-logistic `i'_60 c.ARIAS* c.ages* sex c.IRSDspline* i.priorMI i.CBD i.HT i.AF i.DM i.CHF i.CPD i.PVD i.REND i.DEM i.anticoag c.polypharm if rid ==`ii', coef
+logistic `i'_60 c.ARIAS* c.ages* sex c.IRSDspline* i.priorMI i.CBD i.HT i.AF i.DM i.CHF i.CPD i.PVD i.REND i.anticoag c.polypharm if rid ==`ii', coef
 
 use analysis_adherence_set_sa_admrevasc_`ii', clear
 *create prediction variable from model, then transform into probabability
@@ -2976,7 +3050,7 @@ drop agespline
 mkspline IRSDspline = IRSD_score, cubic knots(780 964 1004 1051) 
 
 
-fracreg logit PDC_`i' c.ARIAS* c.ages* sex c.IRSDspline* i.priorMI i.CBD i.HT i.AF i.DM i.CHF i.CPD i.PVD i.REND i.DEM i.anticoag c.polypharm if rid ==`ii'
+fracreg logit PDC_`i' c.ARIAS* c.ages* sex c.IRSDspline* i.priorMI i.CBD i.HT i.AF i.DM i.CHF i.CPD i.PVD i.REND i.anticoag c.polypharm if rid ==`ii'
 
 use analysis_adherence_set_sa_admrevasc_`ii', clear
 *create prediction variable from model, then transform into probabability
@@ -3091,7 +3165,7 @@ save ads_revasc_spline_sa_90revasc, replace
 
 forval ii = 1/2 {
 use ads_revasc_spline_sa_90revasc, clear
-foreach i in agespline sex priorMI CBD HT AF DM CHF CPD PVD REND DEM IRSD_score mean_ARIA anticoag polypharm {
+foreach i in agespline sex priorMI CBD HT AF DM CHF CPD PVD REND  IRSD_score mean_ARIA anticoag polypharm {
 su(`i') if rid == `ii'
 local m`i' = r(mean)
 }
@@ -3099,7 +3173,7 @@ clear
 set obs 1
 gen rid = `ii'
 br
-foreach i in agespline sex priorMI CBD HT AF DM CHF CPD PVD REND DEM IRSD_score mean_ARIA anticoag polypharm {
+foreach i in agespline sex priorMI CBD HT AF DM CHF CPD PVD REND IRSD_score mean_ARIA anticoag polypharm {
 gen `i' = `m`i''
 }
 mkspline ARIAS= mean_ARIA, cubic knots(0 0.05 0.5 2)
@@ -3129,7 +3203,7 @@ drop agespline
 mkspline IRSDspline = IRSD_score, cubic knots(780 964 1004 1051) 
 
 
-logistic `i'_60 c.ARIAS* c.ages* sex c.IRSDspline* i.priorMI i.CBD i.HT i.AF i.DM i.CHF i.CPD i.PVD i.REND i.DEM i.anticoag c.polypharm if rid ==`ii', coef
+logistic `i'_60 c.ARIAS* c.ages* sex c.IRSDspline* i.priorMI i.CBD i.HT i.AF i.DM i.CHF i.CPD i.PVD i.REND i.anticoag c.polypharm if rid ==`ii', coef
 
 use analysis_adherence_set_sa_90revasc_`ii', clear
 *create prediction variable from model, then transform into probabability
@@ -3209,7 +3283,7 @@ drop agespline
 mkspline IRSDspline = IRSD_score, cubic knots(780 964 1004 1051) 
 
 
-fracreg logit PDC_`i' c.ARIAS* c.ages* sex c.IRSDspline* i.priorMI i.CBD i.HT i.AF i.DM i.CHF i.CPD i.PVD i.REND i.DEM i.anticoag c.polypharm if rid ==`ii'
+fracreg logit PDC_`i' c.ARIAS* c.ages* sex c.IRSDspline* i.priorMI i.CBD i.HT i.AF i.DM i.CHF i.CPD i.PVD i.REND i.anticoag c.polypharm if rid ==`ii'
 
 use analysis_adherence_set_sa_90revasc_`ii', clear
 *create prediction variable from model, then transform into probabability
