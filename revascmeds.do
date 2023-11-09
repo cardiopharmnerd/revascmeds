@@ -2337,15 +2337,14 @@ save ads_revasc_spline, replace
 
 *Creation of prediction data set, using marginal effects at the means of independent variables for PCI and CABG. These are located in the appendices of the manuscript. 
 
-forval ii = 1/2 {
+
 use ads_revasc_spline, clear
 foreach i in agespline sex priorMI CBD HT AF DM CHF CPD PVD REND IRSD_score mean_ARIA anticoag polypharm p2y12_60 statin_60 hstatin_60 ace_arb_60 beta_60 {
-su(`i') if rid == `ii'
+su(`i') 
 local m`i' = r(mean)
 }
 clear
 set obs 1
-gen rid = `ii'
 br
 foreach i in agespline sex priorMI CBD HT AF DM CHF CPD PVD REND IRSD_score mean_ARIA anticoag polypharm p2y12_60 statin_60 hstatin_60 ace_arb_60 beta_60 {
 gen `i' = `m`i''
@@ -2353,16 +2352,9 @@ gen `i' = `m`i''
 mkspline ARIAS= mean_ARIA, cubic knots(0 0.05 0.5 2)
 mkspline ages = agespline, cubic knots(32.5 62.5 72.5 77.5)
 mkspline IRSDspline = IRSD_score, cubic knots(780 964 1004 1051) 
-save analysis_adherence_set_`ii', replace
-}
-append using analysis_adherence_set_1
-gen revasc = ""
-replace revasc = "PCI" if rid == 1
-replace revasc = "CABG" if rid  == 2
-order revasc
-sort rid
-save covariate_means, replace
-use covariate_means, clear
+save analysis_adherence_set, replace
+
+
 *Set up splines followed by logistic regression model construction for PCI and CABG groups
 
 
@@ -2380,7 +2372,7 @@ mkspline IRSDspline = IRSD_score, cubic knots(780 964 1004 1051)
 
 logistic `i'_60 c.ARIAS* c.ages* sex c.IRSDspline* i.priorMI i.CBD i.HT i.AF i.DM i.CHF i.CPD i.PVD i.REND i.anticoag c.polypharm if rid ==`ii', coef
 
-use analysis_adherence_set_`ii', clear
+use analysis_adherence_set, clear
 *create prediction variable from model, then transform into probabability
 predict A
 predict xb, xb
@@ -2390,7 +2382,8 @@ gen ll = xb - (invnormal(0.975)*B)
 gen ul = xb + (invnormal(0.975)*B)
 replace ll = invlogit(ll)
 replace ul = invlogit(ul)
-keep A ul ll rid
+keep A ul ll 
+gen rid = `ii'
 
 save `i'_60_`ii', replace
 
@@ -2511,7 +2504,7 @@ mkspline IRSDspline = IRSD_score, cubic knots(780 964 1004 1051)
 
 logistic p2y12_60 c.ARIAS* c.ages* sex c.IRSDspline* i.priorMI i.CBD i.HT i.AF i.DM i.CHF i.CPD i.PVD i.REND i.anticoag c.polypharm if rid == 2 & sepyear == `ii', coef
 
-use analysis_adherence_set_2, clear
+use analysis_adherence_set, clear
 *create prediction variable from model, then transform into probabability
 predict A
 predict xb, xb
@@ -2521,10 +2514,10 @@ gen ll = xb - (invnormal(0.975)*B)
 gen ul = xb + (invnormal(0.975)*B)
 replace ll = invlogit(ll)
 replace ul = invlogit(ul)
-keep A ul ll rid
+keep A ul ll 
+gen rid = `ii'
 
 save disp_predict_p2y12_year`ii', replace
-
 }
 
 use disp_predict_p2y12_year1, clear
@@ -2572,7 +2565,7 @@ mkspline IRSDspline = IRSD_score, cubic knots(780 964 1004 1051)
 
 fracreg logit PDC_`i' c.ARIAS* c.ages* sex c.IRSDspline* i.priorMI i.CBD i.HT i.AF i.DM i.CHF i.CPD i.PVD i.REND  i.anticoag c.polypharm if rid ==`ii'
 
-use analysis_adherence_set_`ii', clear
+use analysis_adherence_set, clear
 *create prediction variable from model, then transform into probabability
 predict A
 predict xb, xb
@@ -2582,7 +2575,8 @@ gen ll = xb - (invnormal(0.975)*B)
 gen ul = xb + (invnormal(0.975)*B)
 replace ll = invlogit(ll)
 replace ul = invlogit(ul)
-keep A ul ll rid
+keep A ul ll 
+gen rid = `ii'
 
 save `i'_pdc_`ii', replace
 
@@ -2699,34 +2693,6 @@ gen agespline = agegroup + 2.5 if agegroup != 85
 replace agespline = agegroup + 5 if agegroup == 85
 save ads_revasc_spline_sa_nopriormi, replace
 
-*Creation of prediction data set, using marginal effects at the means of independent variables for PCI and CABG. These are located in the appendices of the manuscript. 
-
-forval ii = 1/2 {
-use ads_revasc_spline_sa_nopriormi, clear
-foreach i in agespline sex priorMI CBD HT AF DM CHF CPD PVD REND  IRSD_score mean_ARIA anticoag polypharm {
-su(`i') if rid == `ii'
-local m`i' = r(mean)
-}
-clear
-set obs 1
-gen rid = `ii'
-br
-foreach i in agespline sex priorMI CBD HT AF DM CHF CPD PVD REND  IRSD_score mean_ARIA anticoag polypharm {
-gen `i' = `m`i''
-}
-mkspline ARIAS= mean_ARIA, cubic knots(0 0.05 0.5 2)
-mkspline ages = agespline, cubic knots(32.5 62.5 72.5 77.5)
-mkspline IRSDspline = IRSD_score, cubic knots(780 964 1004 1051) 
-save analysis_adherence_set_sa_nopriormi_`ii', replace
-}
-append using analysis_adherence_set_sa_nopriormi_1
-gen revasc = ""
-replace revasc = "PCI" if rid == 1
-replace revasc = "CABG" if rid  == 2
-order revasc
-sort rid
-save covariate_means_sa_nopriormi, replace
-use covariate_means_sa_nopriormi, clear
 *Set up splines followed by logistic regression model construction for PCI and CABG groups
 
 forval ii = 1/2 {
@@ -2743,7 +2709,7 @@ mkspline IRSDspline = IRSD_score, cubic knots(780 964 1004 1051)
 
 logistic `i'_60 c.ARIAS* c.ages* sex c.IRSDspline* i.priorMI i.CBD i.HT i.AF i.DM i.CHF i.CPD i.PVD i.REND  i.anticoag c.polypharm if rid ==`ii', coef
 
-use analysis_adherence_set_sa_nopriormi_`ii', clear
+use analysis_adherence_set, clear
 *create prediction variable from model, then transform into probabability
 predict A
 predict xb, xb
@@ -2753,7 +2719,8 @@ gen ll = xb - (invnormal(0.975)*B)
 gen ul = xb + (invnormal(0.975)*B)
 replace ll = invlogit(ll)
 replace ul = invlogit(ul)
-keep A ul ll rid
+keep A ul ll 
+gen rid = `ii'
 
 save `i'_60_sa_nopriormi_`ii', replace
 
@@ -2823,7 +2790,7 @@ mkspline IRSDspline = IRSD_score, cubic knots(780 964 1004 1051)
 
 fracreg logit PDC_`i' c.ARIAS* c.ages* sex c.IRSDspline* i.priorMI i.CBD i.HT i.AF i.DM i.CHF i.CPD i.PVD i.REND  i.anticoag c.polypharm if rid ==`ii'
 
-use analysis_adherence_set_sa_nopriormi_`ii', clear
+use analysis_adherence_set, clear
 *create prediction variable from model, then transform into probabability
 predict A
 predict xb, xb
@@ -2833,7 +2800,8 @@ gen ll = xb - (invnormal(0.975)*B)
 gen ul = xb + (invnormal(0.975)*B)
 replace ll = invlogit(ll)
 replace ul = invlogit(ul)
-keep A ul ll rid
+keep A ul ll 
+gen rid = `ii'
 
 save `i'_pdc_sa_nopriormi_`ii', replace
 
@@ -2928,34 +2896,6 @@ gen agespline = agegroup + 2.5 if agegroup != 85
 replace agespline = agegroup + 5 if agegroup == 85
 save ads_revasc_spline_sa_admrevasc, replace
 
-*Creation of prediction data set, using marginal effects at the means of independent variables for PCI and CABG. These are located in the appendices of the manuscript.
-
-forval ii = 1/2 {
-use ads_revasc_spline_sa_admrevasc, clear
-foreach i in agespline sex priorMI CBD HT AF DM CHF CPD PVD REND IRSD_score mean_ARIA anticoag polypharm {
-su(`i') if rid == `ii'
-local m`i' = r(mean)
-}
-clear
-set obs 1
-gen rid = `ii'
-br
-foreach i in agespline sex priorMI CBD HT AF DM CHF CPD PVD REND IRSD_score mean_ARIA anticoag polypharm {
-gen `i' = `m`i''
-}
-mkspline ARIAS= mean_ARIA, cubic knots(0 0.05 0.5 2)
-mkspline ages = agespline, cubic knots(32.5 62.5 72.5 77.5)
-mkspline IRSDspline = IRSD_score, cubic knots(780 964 1004 1051) 
-save analysis_adherence_set_sa_admrevasc_`ii', replace
-}
-append using analysis_adherence_set_sa_admrevasc_1
-gen revasc = ""
-replace revasc = "PCI" if rid == 1
-replace revasc = "CABG" if rid  == 2
-order revasc
-sort rid
-save covariate_means_sa_admrevasc, replace
-use covariate_means_sa_admrevasc, clear
 *Set up splines followed by logistic regression model construction for PCI and CABG groups
 
 forval ii = 1/2 {
@@ -2972,7 +2912,7 @@ mkspline IRSDspline = IRSD_score, cubic knots(780 964 1004 1051)
 
 logistic `i'_60 c.ARIAS* c.ages* sex c.IRSDspline* i.priorMI i.CBD i.HT i.AF i.DM i.CHF i.CPD i.PVD i.REND i.anticoag c.polypharm if rid ==`ii', coef
 
-use analysis_adherence_set_sa_admrevasc_`ii', clear
+use analysis_adherence_set, clear
 *create prediction variable from model, then transform into probabability
 predict A
 predict xb, xb
@@ -2982,7 +2922,8 @@ gen ll = xb - (invnormal(0.975)*B)
 gen ul = xb + (invnormal(0.975)*B)
 replace ll = invlogit(ll)
 replace ul = invlogit(ul)
-keep A ul ll rid
+keep A ul ll 
+gen rid = `ii'
 
 save `i'_60_sa_admrevasc_`ii', replace
 
@@ -3052,7 +2993,7 @@ mkspline IRSDspline = IRSD_score, cubic knots(780 964 1004 1051)
 
 fracreg logit PDC_`i' c.ARIAS* c.ages* sex c.IRSDspline* i.priorMI i.CBD i.HT i.AF i.DM i.CHF i.CPD i.PVD i.REND i.anticoag c.polypharm if rid ==`ii'
 
-use analysis_adherence_set_sa_admrevasc_`ii', clear
+use analysis_adherence_set, clear
 *create prediction variable from model, then transform into probabability
 predict A
 predict xb, xb
@@ -3062,7 +3003,8 @@ gen ll = xb - (invnormal(0.975)*B)
 gen ul = xb + (invnormal(0.975)*B)
 replace ll = invlogit(ll)
 replace ul = invlogit(ul)
-keep A ul ll rid
+keep A ul ll 
+gen rid = `ii'
 
 save `i'_pdc_sa_admrevasc_`ii', replace
 
@@ -3161,34 +3103,6 @@ gen agespline = agegroup + 2.5 if agegroup != 85
 replace agespline = agegroup + 5 if agegroup == 85
 save ads_revasc_spline_sa_90revasc, replace
 
-*Creation of prediction data set, using marginal effects at the means of independent variables for PCI and CABG. These are located in the appendices of the manuscript. 
-
-forval ii = 1/2 {
-use ads_revasc_spline_sa_90revasc, clear
-foreach i in agespline sex priorMI CBD HT AF DM CHF CPD PVD REND  IRSD_score mean_ARIA anticoag polypharm {
-su(`i') if rid == `ii'
-local m`i' = r(mean)
-}
-clear
-set obs 1
-gen rid = `ii'
-br
-foreach i in agespline sex priorMI CBD HT AF DM CHF CPD PVD REND IRSD_score mean_ARIA anticoag polypharm {
-gen `i' = `m`i''
-}
-mkspline ARIAS= mean_ARIA, cubic knots(0 0.05 0.5 2)
-mkspline ages = agespline, cubic knots(32.5 62.5 72.5 77.5)
-mkspline IRSDspline = IRSD_score, cubic knots(780 964 1004 1051) 
-save analysis_adherence_set_sa_90revasc_`ii', replace
-}
-append using analysis_adherence_set_sa_90revasc_1
-gen revasc = ""
-replace revasc = "PCI" if rid == 1
-replace revasc = "CABG" if rid  == 2
-order revasc
-sort rid
-save covariate_means_sa_90revasc, replace
-use covariate_means_sa_90revasc, clear
 *Set up splines followed by logistic regression model construction for PCI and CABG groups
 
 forval ii = 1/2 {
@@ -3205,7 +3119,7 @@ mkspline IRSDspline = IRSD_score, cubic knots(780 964 1004 1051)
 
 logistic `i'_60 c.ARIAS* c.ages* sex c.IRSDspline* i.priorMI i.CBD i.HT i.AF i.DM i.CHF i.CPD i.PVD i.REND i.anticoag c.polypharm if rid ==`ii', coef
 
-use analysis_adherence_set_sa_90revasc_`ii', clear
+use analysis_adherence_set, clear
 *create prediction variable from model, then transform into probabability
 predict A
 predict xb, xb
@@ -3215,7 +3129,8 @@ gen ll = xb - (invnormal(0.975)*B)
 gen ul = xb + (invnormal(0.975)*B)
 replace ll = invlogit(ll)
 replace ul = invlogit(ul)
-keep A ul ll rid
+keep A ul ll 
+gen rid = `ii'
 
 save `i'_60_sa_90revasc_`ii', replace
 
@@ -3285,7 +3200,7 @@ mkspline IRSDspline = IRSD_score, cubic knots(780 964 1004 1051)
 
 fracreg logit PDC_`i' c.ARIAS* c.ages* sex c.IRSDspline* i.priorMI i.CBD i.HT i.AF i.DM i.CHF i.CPD i.PVD i.REND i.anticoag c.polypharm if rid ==`ii'
 
-use analysis_adherence_set_sa_90revasc_`ii', clear
+use analysis_adherence_set, clear
 *create prediction variable from model, then transform into probabability
 predict A
 predict xb, xb
@@ -3295,10 +3210,10 @@ gen ll = xb - (invnormal(0.975)*B)
 gen ul = xb + (invnormal(0.975)*B)
 replace ll = invlogit(ll)
 replace ul = invlogit(ul)
-keep A ul ll rid
+keep A ul ll 
+gen rid = `ii'
 
 save `i'_pdc_sa_90revasc_`ii', replace
-
 }
 }
 clear
@@ -3378,7 +3293,7 @@ save table_`i'_sens_`ii'_all, replace
 }
 }
 
-}
+
 texdoc stlog close
 
 /***
