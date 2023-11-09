@@ -64,7 +64,10 @@ Center for Medication Use and Safety, Faculty of Pharmacy and Pharmaceutical Sci
 The is the protocol for the paper Revascularization strategy following NSTEMI and predicting secondary prevention medication use: a linked data study. \\
 This protocol details the data preparation (cleaning that was undertaken from a linked dataset provided by the Victorian Department of Health as the source of Victorian Admitted Episodes Dataset (VAED), and the Centre for Vicotiran Data Linkage for provision of data linkage). This study was approved by the Human Research and Ethics Committees from the Australian Institute for Health and Welfare (AIHW) (EO2018/4/468) and Monash University (14339). \\
 The initial cohort, with removal of nested admissions, transfers and same-day admissions was previously cleaned and presented in a previous \color{blue} \href{https://github.com/cardiopharmnerd/medsremote}{protocol}.\\
-\color{black} To generate this document, the Stata package texdoc was used, which is avaiable from \color{blue} \href{http://repec.sowi.unibe.ch/stata/texdoc/}{here}. \color{black} The do file was orignially coded and then exported from the Secure Unified Research Environment (SURE), and so the histograms geenreated were exported separately and then imported via LaTex coding due to constraints on exporting raw data from SURE. Therefore, when reproducing the code, use the do file rather than copying from the LaTex document. 
+\color{black} To generate this document, the Stata package texdoc was used, which is avaiable from \color{blue} \href{http://repec.sowi.unibe.ch/stata/texdoc/}{here}. \color{black} The do file was orignially coded and then exported from the Secure Unified Research Environment (SURE), and so the histograms geenreated were exported separately and then imported via LaTex coding due to constraints on exporting raw data from SURE. Therefore, when reproducing the code, use the do file rather than copying from the LaTex document.\\~\\
+
+Cheers, \\
+Adam C. Livori
 
 \section{Abbreviations}
 
