@@ -64,10 +64,7 @@ Center for Medication Use and Safety, Faculty of Pharmacy and Pharmaceutical Sci
 The is the protocol for the paper Revascularization strategy following NSTEMI and predicting secondary prevention medication use: a linked data study. \\
 This protocol details the data preparation (cleaning that was undertaken from a linked dataset provided by the Victorian Department of Health as the source of Victorian Admitted Episodes Dataset (VAED), and the Centre for Vicotiran Data Linkage for provision of data linkage). This study was approved by the Human Research and Ethics Committees from the Australian Institute for Health and Welfare (AIHW) (EO2018/4/468) and Monash University (14339). \\
 The initial cohort, with removal of nested admissions, transfers and same-day admissions was previously cleaned and presented in a previous \color{blue} \href{https://github.com/cardiopharmnerd/medsremote}{protocol}.\\
-\color{black} To generate this document, the Stata package texdoc was used, which is avaiable from \color{blue} \href{http://repec.sowi.unibe.ch/stata/texdoc/}{here}. \color{black} The do file was orignially coded and then exported from the Secure Unified Research Environment (SURE), and so the histograms geenreated were exported separately and then imported via LaTex coding due to constraints on exporting raw data from SURE. Therefore, when reproducing the code, use the do file rather than copying from the LaTex document.\\~\\
-
-Cheers, \\
-Adam C. Livori
+\color{black} To generate this document, the Stata package texdoc was used, which is avaiable from \color{blue} \href{http://repec.sowi.unibe.ch/stata/texdoc/}{here}. \color{black} The do file was orignially coded and then exported from the Secure Unified Research Environment (SURE), and so the histograms geenreated were exported separately and then imported via LaTex coding due to constraints on exporting raw data from SURE. Therefore, when reproducing the code, use the do file rather than copying from the LaTex document. 
 
 \section{Abbreviations}
 
@@ -2454,7 +2451,7 @@ twoway ///
 (bar A classrid if Class == 5 & rid ==1, barw(0.8) col(dknavy%90)) ///
 (bar A classrid if Class == 5 & rid ==2, barw(0.8) col(red%80)) ///
 (rcap ll ul classrid, col(black)), graphregion(color(white)) ///
-yscale(range(0,1)) ylabel(0 "0.0"  0.2 "0.2"  0.4 "0.4"  0.6 "0.6"  0.8 "0.8"  1.0 "1.0") ytitle("Probability of dispensing within 60 days post discharge")  ///
+yscale(range(0,1)) ylabel(0 "0.0"  0.2 "0.2"  0.4 "0.4"  0.6 "0.6"  0.8 "0.8"  1.0 "1.0", angle(0)) ytitle("Probability of dispensing within 60 days post discharge")  ///
 xlabel(1.5 "P2Y12i" 4.5 "Statin" 7.5 "High intensity statin" 10.5 "ACEi/ARB" 13.5 "Beta blocker") xtitle("") legend(order(1 "PCI" 2 "CABG"))
 graph save "G:\Adam\Project - revasc and outcome prediction\Results\fig_disp", replace 
 
@@ -2647,7 +2644,7 @@ twoway ///
 (bar A classrid if Class == 5 & rid ==1, barw(0.8) col(dknavy%90)) ///
 (bar A classrid if Class == 5 & rid ==2, barw(0.8) col(red%80)) ///
 (rcap ll ul classrid, col(black)), graphregion(color(white)) ///
-yscale(range(0,1)) ylabel(0 "0.0"  0.2 "0.2"  0.4 "0.4"  0.6 "0.6"  0.8 "0.8"  1.0 "1.0") ytitle("PDC at 12 months post discharge")  ///
+yscale(range(0,1)) ylabel(0 "0.0"  0.2 "0.2"  0.4 "0.4"  0.6 "0.6"  0.8 "0.8"  1.0 "1.0", angle(0)) ytitle("PDC at 12 months post discharge")  ///
 xlabel(1.5 "P2Y12i" 4.5 "Statin" 7.5 "High intensity statin" 10.5 "ACEi/ARB" 13.5 "Beta blocker") xtitle("") legend(order(1 "PCI" 2 "CABG") ring(0) position(12) region(lcolor(white) color(none)))
 graph save "G:\Adam\Project - revasc and outcome prediction\Results\fig_pdc", replace 
 
