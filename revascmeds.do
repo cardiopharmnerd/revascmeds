@@ -10,7 +10,6 @@ set linesize 100
 \usepackage[x11names]{xcolor}
 \usepackage{natbib}
 \usepackage{chngcntr}
-\usepackage{pgfplotstable}
 \usepackage{pdflscape}
 \usepackage{multirow}
 \usepackage{booktabs}
@@ -28,7 +27,7 @@ set linesize 100
 \begin{titlepage}
   \begin{flushright}
         \Huge
-		\textbf{Revascularization strategy following NSTEMI and predicting secondary prevention medication use: a linked data study.}
+		\textbf{First Patterns of 12-month post myocardial infarction medication use according to revascularization strategy: analysis of 15,339 admissions in Victoria, Australia }
 \color{violet}
 \rule{16cm}{2mm} \\
 \Large
@@ -1527,9 +1526,9 @@ texdoc stlog close
 \color{black}
 \begin{figure} [h]
 	\centering
-	\includegraphics[width=0.5\textwidth]{hist_cvd.pdf}
-	\caption{Histogram of cardiovascular deaths following NSTEMI}
-	\label{hist_cvd}
+	\includegraphics[width=0.5\textwidth]{hist_strokeadm.pdf}
+	\caption{Histogram of strokes following NSTEMI}
+	\label{stroke_cvd}
 \end{figure}
 \color{violet}
 ***/
