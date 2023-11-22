@@ -1459,11 +1459,11 @@ Using the NDI and VAED datasets, we determined the following clinical outcomes:
 \item Stroke
 \item Revascularisation
 \end{itemize}
-\color{violet}
 \subsection{All-cause death}
 Information on any reported deaths is already present following the merge with the NDI dataset. This date (if present) will be used for all-cause death.
 \subsection{Cardiovascular death}
 This step involved merging a previous dataset containing the MI cohort from a previous study \color{blue} \href{https://github.com/cardiopharmnerd/medsremote}{protocol}. \color(black) This data was sourced from the NDI with a cardiovascular primary cause of death allowing for identifcation of cardiovascular death. 
+\color{violet}
 ***/
 
 texdoc stlog, cmdlog nodo
@@ -1595,7 +1595,7 @@ texdoc stlog close
 \end{figure}
 
 \subsection{Admission for revascularisation}
-\color{black}
+\color{violet}
 ***/
 
 texdoc stlog, cmdlog nodo
@@ -1813,36 +1813,37 @@ save ads_revasc_age10, replace
 use ads_revasc_age10, clear
 
 gen tahelp = 1
-ta tahelp rid, 								matcell(B1)
-ta sex rid if sex == 1,						matcell(B2)
-ta agegroup rid, 							matcell(B3)
-ta priorMI rid if priorMI == 1,				matcell(B4)
-ta CBD rid if CBD== 1,	 					matcell(B5)
-ta HT rid if HT== 1, 						matcell(B6)
-ta AF rid if AF== 1, 						matcell(B7)
-ta DM rid if DM== 1, 						matcell(B8)
-ta CHF rid if CHF== 1, 						matcell(B9)
-ta CPD rid if CPD == 1, 					matcell(B10)
-ta PVD rid if PVD == 1, 					matcell(B11)
-ta REND rid if REND == 1, 					matcell(B12)
-ta prevPCI rid if prevPCI == 1, 			matcell(B14)
-ta prevCABG rid if prevCABG == 1, 			matcell(B15)
-ta hosp_mort rid if hosp_mort == 1, 		matcell(B16)
-ta hosp_mort rid if hosp_mort == 2, 		matcell(B17)
-ta ARIA rid, rowsort 						matcell(B18)
-ta p2y12_prior rid if p2y12_prior == 1 ,	matcell(B19)
-ta statin_prior rid if statin_prior == 1, 	matcell(B20)
+ta tahelp rid, matcell(B1)
+ta sex rid if sex == 1,	matcell(B2)
+ta agegroup rid, matcell(B3)
+ta priorMI rid if priorMI == 1,	matcell(B4)
+ta CBD rid if CBD== 1, matcell(B5)
+ta HT rid if HT== 1, matcell(B6)
+ta AF rid if AF== 1, matcell(B7)
+ta DM rid if DM== 1, matcell(B8)
+ta CHF rid if CHF== 1, matcell(B9)
+ta CPD rid if CPD == 1, matcell(B10)
+ta PVD rid if PVD == 1, matcell(B11)
+ta REND rid if REND == 1, matcell(B12)
+ta prevPCI rid if prevPCI == 1, matcell(B14)
+ta prevCABG rid if prevCABG == 1, matcell(B15)
+ta hosp_mort rid if hosp_mort == 1, matcell(B16)
+ta hosp_mort rid if hosp_mort == 2, matcell(B17)
+ta ARIA rid, rowsort matcell(B18)
+ta p2y12_prior rid if p2y12_prior == 1 , matcell(B19)
+ta statin_prior rid if statin_prior == 1, matcell(B20)
 ta ace_arb_prior rid if ace_arb_prior == 1, matcell(B21)
-ta beta_prior rid if beta_prior == 1, 		matcell(B22) 
-ta p2y12_60 rid if p2y12_60 == 1, 			matcell(B23)
-ta statin_60 rid if statin_60 == 1,			matcell(B24)
-ta hstatin_60 rid if hstatin_60 == 1,		matcell(B28)
-ta ace_arb_60 rid if ace_arb_60 == 1,		matcell(B25)
-ta beta_60 rid if beta_60 == 1, 			matcell(B26)
-ta OMT rid, 								matcell(B27)
+ta beta_prior rid if beta_prior == 1, matcell(B22) 
+ta anticoag rid if anticoag == 1, matcell(B29)
+ta p2y12_60 rid if p2y12_60 == 1, matcell(B23)
+ta statin_60 rid if statin_60 == 1,	matcell(B24)
+ta hstatin_60 rid if hstatin_60 == 1, matcell(B28)
+ta ace_arb_60 rid if ace_arb_60 == 1, matcell(B25)
+ta beta_60 rid if beta_60 == 1, matcell(B26)
+ta OMT rid, matcell(B27)
 
 
-matrix B = (B1\B2\B3\B4\B5\B6\B7\B8\B9\B10\B11\B12\B14\B15\B16\B17\B18\B19\B20\B21\B22\B23\B24\B28\B25\B26\B27)
+matrix B = (B1\B2\B3\B4\B5\B6\B7\B8\B9\B10\B11\B12\B14\B15\B16\B17\B18\B19\B20\B21\B22\B29\B23\B24\B28\B25\B26\B27)
 matrix list B
 clear
 svmat B
@@ -1864,43 +1865,44 @@ drop `i'proportion1
 
 gen id = _n
 gen name = ""
-replace name = "Male" if 								_n == 2
-replace name = "Aged 30-39" if 							_n == 3
-replace name = "Aged 40-49" if 							_n == 4
-replace name = "Aged 50-54" if 							_n == 5 
-replace name = "Aged 60-64" if 							_n == 6
-replace name = "Aged 70-74" if 							_n == 7
-replace name = "Aged 80+" if 							_n == 8
-replace name = "Previous myocardial infarction" if		_n == 9
-replace name = "Previous stroke" if 					_n == 10
-replace name = "Hypertension" if 						_n == 11
-replace name = "Atrial fibrillation" if 				_n == 12
-replace name = "Diabetes" if 							_n == 13
-replace name = "Heart failure" if 						_n == 14
-replace name = "Chronic pulmonary disease" if 			_n == 15
-replace name = "Peripeheral vascular disease" if		_n == 16
-replace name = "Renal disease" if					 	_n == 17
-replace name = "Previous PCI" if 						_n == 18
-replace name = "Previous CABG" if 						_n == 19
-replace name = "Died during admission" if				_n == 20
-replace name = "Died within 90 days of discharge" if	_n == 21
-replace name = "Metropolitan" if 						_n == 22
-replace name = "Inner regional" if						_n == 23
-replace name = "Outer regional" if 						_n == 24
-replace name = "Prior P2Y12 inhibitor" if				_n == 25
-replace name = "Prior Statin" if						_n == 26
-replace name = "Prior ACE inhibitor or ARB" if			_n == 27
-replace name = "Prior beta blocker"  if		 			_n == 28
-replace name = "P2Y12 inhibitor"  if				 	_n == 29
-replace name = "Statin" if								_n == 30
-replace name = "High intensity statin" if				_n == 31
-replace name = "ACE inhibitor or ARB" if 				_n == 32
-replace name = "Beta blocker" if					 	_n == 33
-replace name = "No medication classes dispensed" if		_n == 34
-replace name = "One medication classes dispensed" if 	_n == 35
-replace name = "Two medication classes dispensed" if 	_n == 36
-replace name = "Three medication classes dispensed" if	_n == 37
-replace name = "Four medication classes dispensed"  if 	_n == 38
+replace name = "Male" if _n == 2
+replace name = "Aged 30-39" if	_n == 3
+replace name = "Aged 40-49" if _n == 4
+replace name = "Aged 50-54" if _n == 5 
+replace name = "Aged 60-64" if _n == 6
+replace name = "Aged 70-74" if _n == 7
+replace name = "Aged 80+" if _n == 8
+replace name = "Previous myocardial infarction" if _n == 9
+replace name = "Previous stroke" if _n == 10
+replace name = "Hypertension" if _n == 11
+replace name = "Atrial fibrillation" if _n == 12
+replace name = "Diabetes" if _n == 13
+replace name = "Heart failure" if _n == 14
+replace name = "Chronic pulmonary disease" if _n == 15
+replace name = "Peripeheral vascular disease" if _n == 16
+replace name = "Renal disease" if _n == 17
+replace name = "Previous PCI" if _n == 18
+replace name = "Previous CABG" if _n == 19
+replace name = "Died during admission" if _n == 20
+replace name = "Died within 90 days of discharge" if _n == 21
+replace name = "Metropolitan" if _n == 22
+replace name = "Inner regional" if	_n == 23
+replace name = "Outer regional" if 	_n == 24
+replace name = "Prior P2Y12 inhibitor" if _n == 25
+replace name = "Prior Statin" if _n == 26
+replace name = "Prior ACE inhibitor or ARB" if	_n == 27
+replace name = "Prior beta blocker"  if	_n == 28
+replace name = "Prior anticoagulation" if _n == 29
+replace name = "P2Y12 inhibitor"  if _n == 30
+replace name = "Statin" if _n == 31
+replace name = "High intensity statin" if _n == 32
+replace name = "ACE inhibitor or ARB" if _n == 33
+replace name = "Beta blocker" if _n == 34
+replace name = "No medication classes dispensed" if	_n == 35
+replace name = "One medication classes dispensed" if _n == 36
+replace name = "Two medication classes dispensed" if _n == 37
+replace name = "Three medication classes dispensed" if _n == 38
+replace name = "Four medication classes dispensed"  if 	_n == 39
 
 
 
@@ -1984,7 +1986,7 @@ replace category = "Co-morbidities" if _n == 9
 replace category = "Mortality" if _n == 20
 replace category = "Remoteness and socio-economic status" if _n == 22
 replace category = "Medications dispensed within 90 days prior to MI admission" if _n == 26
-replace category = "Medications dispensed within 60 days following MI admission" if _n == 31
+replace category = "Medications dispensed within 60 days following MI admission" if _n == 32
 order category
 save table_totaldemo, replace
 use table_totaldemo, clear
@@ -2003,36 +2005,37 @@ drop if rid == 0
 keep if hosp_mort == 0
 
 gen tahelp = 1
-ta tahelp rid, 								matcell(B1)
-ta sex rid if sex == 1,						matcell(B2)
-ta agegroup rid, 							matcell(B3)
-ta priorMI rid if priorMI == 1,				matcell(B4)
-ta CBD rid if CBD== 1,	 					matcell(B5)
-ta HT rid if HT== 1, 						matcell(B6)
-ta AF rid if AF== 1, 						matcell(B7)
-ta DM rid if DM== 1, 						matcell(B8)
-ta CHF rid if CHF== 1, 						matcell(B9)
-ta CPD rid if CPD == 1, 					matcell(B10)
-ta PVD rid if PVD == 1, 					matcell(B11)
-ta REND rid if REND == 1, 					matcell(B12)
-ta prevPCI rid if prevPCI == 1, 			matcell(B14)
-ta prevCABG rid if prevCABG == 1, 			matcell(B15)
-ta hosp_mort rid if hosp_mort == 1, 		matcell(B16)
-ta hosp_mort rid if hosp_mort == 2, 		matcell(B17)
-ta ARIA rid, rowsort 						matcell(B18)
-ta p2y12_prior rid if p2y12_prior == 1 ,	matcell(B19)
-ta statin_prior rid if statin_prior == 1, 	matcell(B20)
+ta tahelp rid, matcell(B1)
+ta sex rid if sex == 1, matcell(B2)
+ta agegroup rid, matcell(B3)
+ta priorMI rid if priorMI == 1, matcell(B4)
+ta CBD rid if CBD== 1, matcell(B5)
+ta HT rid if HT== 1, matcell(B6)
+ta AF rid if AF== 1, matcell(B7)
+ta DM rid if DM== 1, matcell(B8)
+ta CHF rid if CHF== 1, matcell(B9)
+ta CPD rid if CPD == 1, matcell(B10)
+ta PVD rid if PVD == 1, matcell(B11)
+ta REND rid if REND == 1, matcell(B12)
+ta prevPCI rid if prevPCI == 1, matcell(B14)
+ta prevCABG rid if prevCABG == 1, matcell(B15)
+ta hosp_mort rid if hosp_mort == 1, matcell(B16)
+ta hosp_mort rid if hosp_mort == 2, matcell(B17)
+ta ARIA rid, rowsort matcell(B18)
+ta p2y12_prior rid if p2y12_prior == 1,	matcell(B19)
+ta statin_prior rid if statin_prior == 1, matcell(B20)
 ta ace_arb_prior rid if ace_arb_prior == 1, matcell(B21)
-ta beta_prior rid if beta_prior == 1, 		matcell(B22) 
-ta p2y12_60 rid if p2y12_60 == 1, 			matcell(B23)
-ta statin_60 rid if statin_60 == 1,			matcell(B24)
-ta hstatin_60 rid if hstatin_60 == 1, 		matcell(B28)
-ta ace_arb_60 rid if ace_arb_60 == 1,		matcell(B25)
-ta beta_60 rid if beta_60 == 1, 			matcell(B26)
-ta OMT rid, 								matcell(B27)
+ta beta_prior rid if beta_prior == 1, matcell(B22)
+ta anticoag rid if anticoag == 1, matcell(B29)
+ta p2y12_60 rid if p2y12_60 == 1, matcell(B23)
+ta statin_60 rid if statin_60 == 1,	matcell(B24)
+ta hstatin_60 rid if hstatin_60 == 1, matcell(B28)
+ta ace_arb_60 rid if ace_arb_60 == 1, matcell(B25)
+ta beta_60 rid if beta_60 == 1, matcell(B26)
+ta OMT rid, matcell(B27)
 
 
-matrix B = (B1\B2\B3\B4\B5\B6\B7\B8\B9\B10\B11\B12\B14\B15\B18\B19\B20\B21\B22\B23\B24\B28\B25\B26\B27)
+matrix B = (B1\B2\B3\B4\B5\B6\B7\B8\B9\B10\B11\B12\B14\B15\B18\B19\B20\B21\B22\B29\B23\B24\B28\B25\B26\B27)
 matrix list B
 clear
 svmat B
@@ -2054,41 +2057,42 @@ drop `i'proportion1
 
 gen id = _n
 gen name = ""
-replace name = "Male" if 								_n == 2
-replace name = "Aged 30-39" if 							_n == 3
-replace name = "Aged 40-49" if 							_n == 4
-replace name = "Aged 50-54" if 							_n == 5 
-replace name = "Aged 60-64" if 							_n == 6
-replace name = "Aged 70-74" if 							_n == 7
-replace name = "Aged 80+" if 							_n == 8
-replace name = "Previous myocardial infarction" if		_n == 9
-replace name = "Previous stroke" if 					_n == 10
-replace name = "Hypertension" if 						_n == 11
-replace name = "Atrial fibrillation" if 				_n == 12
-replace name = "Diabetes" if 							_n == 13
-replace name = "Heart failure" if 						_n == 14
-replace name = "Chronic pulmonary disease" if 			_n == 15
-replace name = "Peripeheral vascular disease" if		_n == 16
-replace name = "Renal disease" if					 	_n == 17
-replace name = "Previous PCI" if 						_n == 18
-replace name = "Previous CABG" if 						_n == 19
-replace name = "Metropolitan" if 						_n == 20
-replace name = "Inner regional" if						_n == 21
-replace name = "Outer regional" if 						_n == 22
-replace name = "Prior P2Y12 inhibitor" if				_n == 23
-replace name = "Prior Statin" if						_n == 24
-replace name = "Prior ACE inhibitor or ARB" if			_n == 25
-replace name = "Prior beta blocker"  if		 			_n == 26
-replace name = "P2Y12 inhibitor"  if				 	_n == 27
-replace name = "Statin" if								_n == 28
-replace name = "High intensity statin" if 				_n == 29
-replace name = "ACE inhibitor or ARB" if 				_n == 30
-replace name = "Beta blocker" if					 	_n == 31
-replace name = "No medication classes dispensed" if		_n == 32
-replace name = "One medication classes dispensed" if 	_n == 33
-replace name = "Two medication classes dispensed" if 	_n == 34
-replace name = "Three medication classes dispensed" if	_n == 35
-replace name = "Four medication classes dispensed"  if 	_n == 36
+replace name = "Male" if _n == 2
+replace name = "Aged 30-39" if _n == 3
+replace name = "Aged 40-49" if _n == 4
+replace name = "Aged 50-54" if _n == 5 
+replace name = "Aged 60-64" if _n == 6
+replace name = "Aged 70-74" if _n == 7
+replace name = "Aged 80+" if _n == 8
+replace name = "Previous myocardial infarction" if _n == 9
+replace name = "Previous stroke" if _n == 10
+replace name = "Hypertension" if _n == 11
+replace name = "Atrial fibrillation" if _n == 12
+replace name = "Diabetes" if _n == 13
+replace name = "Heart failure" if _n == 14
+replace name = "Chronic pulmonary disease" if _n == 15
+replace name = "Peripeheral vascular disease" if _n == 16
+replace name = "Renal disease" if _n == 17
+replace name = "Previous PCI" if _n == 18
+replace name = "Previous CABG" if _n == 19
+replace name = "Metropolitan" if _n == 20
+replace name = "Inner regional" if	_n == 21
+replace name = "Outer regional" if 	_n == 22
+replace name = "Prior P2Y12 inhibitor" if _n == 23
+replace name = "Prior Statin" if _n == 24
+replace name = "Prior ACE inhibitor or ARB" if 	_n == 25
+replace name = "Prior beta blocker"  if	_n == 26
+replace name = "Prior anticoagulation" if _n == 27
+replace name = "P2Y12 inhibitor"  if _n == 28
+replace name = "Statin" if	_n == 29
+replace name = "High intensity statin" if _n == 30
+replace name = "ACE inhibitor or ARB" if _n == 31
+replace name = "Beta blocker" if _n == 32
+replace name = "No medication classes dispensed" if	_n == 33
+replace name = "One medication classes dispensed" if _n == 34
+replace name = "Two medication classes dispensed" if _n == 35
+replace name = "Three medication classes dispensed" if	_n == 36
+replace name = "Four medication classes dispensed"  if 	_n == 37
 
 
 
@@ -2169,7 +2173,7 @@ replace category = "Baseline characteristics" if _n == 2
 replace category = "Co-morbidities" if _n == 9
 replace category = "Remoteness and socio-economic status" if _n == 20
 replace category = "Medications dispensed within 90 days prior to MI admission" if _n == 24
-replace category = "Medications dispensed within 60 days following MI admission" if _n == 29
+replace category = "Medications dispensed within 60 days following MI admission" if _n == 30
 order category
 save table_analdemo, replace
 use table_analdemo, clear
@@ -2334,7 +2338,7 @@ gen agespline = agegroup + 2.5 if agegroup != 85
 replace agespline = agegroup + 5 if agegroup == 85
 save ads_revasc_spline, replace
 
-*Creation of prediction data set, using marginal effects at the means of independent variables for PCI and CABG. These are located in the appendices of the manuscript. 
+*Creation of prediction data set, using marginal effects at the means of independent variables. These are located in the appendices of the manuscript. 
 
 
 use ads_revasc_spline, clear
